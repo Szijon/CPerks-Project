@@ -5,11 +5,13 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 
 public class HologramHandler {
         ///SPAWNS A HOLOGRAM (FLOATING TEXT) WITH SPECIFIED TEXT AND LOCATION
     public static void spawnHologram(String text, Location location){
-        ArmorStand holo = (ArmorStand) location.getWorld().spawnEntity(location.add(new Vector(0.5f, -0.5f, 0.5f)), EntityType.ARMOR_STAND);
+        ArmorStand holo = (ArmorStand) Objects.requireNonNull(location.getWorld()).spawnEntity(location.add(new Vector(0.5f, -0.5f, 0.5f)), EntityType.ARMOR_STAND);
         holo.setInvisible(true);
         holo.setInvulnerable(true);
         holo.setCustomName(text);

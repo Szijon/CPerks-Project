@@ -7,7 +7,7 @@ import org.bukkit.scoreboard.*;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
 
 public class ScoreboardHandler {
-
+        ///USED TO UPDATE THE SCOREBOARD, A SMALL HUD ELEMENT THAT CAN DISPLAY TEXT.
     public static void updateScoreboard(Player player, String perk){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
@@ -21,7 +21,7 @@ public class ScoreboardHandler {
         String perkExpString = getExperienceString(player, perk);
 
         Score headLine = objective.getScore(ChatColor.BLUE + "#" + ChatColor.STRIKETHROUGH + "" + ChatColor.BLUE + "    " + ChatColor.RED);
-        Score shop = objective.getScore(ChatColor.BLUE + "#" + " " + ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "/perks");
+        Score shop = objective.getScore(ChatColor.BLUE + "#" + " " + ChatColor.BOLD + "" + ChatColor.LIGHT_PURPLE  + "/perks");
         Score empty2 = objective.getScore(ChatColor.BLUE + "#");
         Score goldBal = objective.getScore(ChatColor.BLUE + "#" + " " + ChatColor.GOLD + "Gold: " + gold);
         Score coinBal = objective.getScore(ChatColor.BLUE + "#" + " " + ChatColor.GREEN + "Coins: " + coins);

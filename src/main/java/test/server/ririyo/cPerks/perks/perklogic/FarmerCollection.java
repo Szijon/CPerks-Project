@@ -1,13 +1,8 @@
 package test.server.ririyo.cPerks.perks.perklogic;
 
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.util.Vector;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import org.bukkit.util.Vector;
 
 public class FarmerCollection {
 
