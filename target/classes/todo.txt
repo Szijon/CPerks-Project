@@ -1,0 +1,44 @@
+Implement WoodCutter Experience Gain                            ✔
+Implement Miner Experience Gain                                 ✔
+ADD VeinMiner to TreeCutter                                     ✔
+Make VeinMiner work with Unbreaking                             ✔
+ADD VeinMiner to                                                ✔
+Make VeinMiner function with Fortune                            ✔
+Add Auto-Smelt                                                  ✔
+ADD /unlocks to /perks <job> that Displays all abilities        ✔
+ADD replant to TreeCutter                                       ✔
+Add Farmer Perk                                                 ✔
+Add Replant for Farmer                                          ✔
+Add 3x3 Harvest for Farmer                                      ✔
+Add Hunter Perk                                                 ✔
+Add Hunter Level Up Function                                    ✔
+Add Backpack for Hunter Level                                   ✔
+Make Spawners Mine-able and change spawn type on place          ✔
+Add Unlock Statistics to /perk <perk> if unlocked               ✔
+Implement Egg Drop Feature for Hunter                           ✔
+Implement Enchanter Job Experience Gain                         ✔
+Add EXP Refund to Enchanter                                     ✔
+Add Currency System to Hide Features behind                     ✔
+Features to Hide - Spawner Silk Touch, Keep Inventory           ✔
+Rewrite Unlock related code                                     ✔
+Add Vanilla Enchants OverLevel                                  ✔
+Way to earn Gold                                                ✔
+Clean Up BlockListener Code                                     ✔
+Add Ability to gain Vanilla Experience Points from other perks  ✔
+Add Scoreboard to keep track of Perk Exp & Gold/Coin Balance    ✔
+Clean Up PerksCommand                                           ✔
+Clean Up PlayerInteractListener                                 ✔
+Add Flight Time above Hotbar                                    ✔
+Fix Commands                                                    ✔
+Create LootCrate command                                        ✔
+- command to give player x a key                                ✔
+- command to give player x a placeable loot crate               ✔
+- Add TabComplete                                               ✔
+ADD BETTER LOOT POOLS AND MORE KEYS                             ✔
+
+Add Boosters                                                    ❔
+
+
+
+
+Add Custom Enchants that are locked behind Enchanter Level      ✖

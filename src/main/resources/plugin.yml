@@ -1,0 +1,29 @@
+name: CPerks
+version: '0.5'
+main: test.server.ririyo.cPerks.CPerks
+api-version: '1.21'
+commands:
+
+  perks:
+    description: "Displays Information about your Perks."
+    usage: /<command>
+
+  backpack:
+    description: "Opens Your Backpack."
+    usage: /<command>
+    aliases: [rucksack]
+
+  lootcrate:
+    description: "Gives Target Player a specified amount of keys or crates."
+    usage: /<command> give [target] [crate/key:type] (amount)
+    aliases: [lc]
+
+  flight:
+    description: "Toggles flight if you have Flight-Time."
+    usage: /<command> time
+    aliases: [fliegen]
+
+permissions:
+  cperks.lootcrate:
+    description: Allows for full use of /lootcrate
+    default: op

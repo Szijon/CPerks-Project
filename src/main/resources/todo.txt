@@ -1,0 +1,44 @@
+I left this here as for others to be able to see my approach to this project.
+
+Implement Woodcutter Experience Gain                            ✔
+Implement Miner Experience Gain                                 ✔
+Add VeinMiner to Woodcutter                                     ✔
+Make VeinMiner work with Unbreaking                             ✔
+Add VeinMiner to Miner                                          ✔ - Is duplicated since the same code is found in Woodcutter - to be removed
+Make VeinMiner function with Fortune                            ✔ - Removed since this works without any extra code
+Add Auto-Smelt                                                  ✔
+Add /unlocks to /perks <job> that Displays all abilities        ✔ - Removed since this has been moved to a Menu
+Add replant to TreeCutter                                       ✔
+Add Farmer Perk                                                 ✔
+Add Replant for Farmer                                          ✔
+Add 3x3 Harvest for Farmer                                      ✔
+Add Hunter Perk                                                 ✔
+Add Hunter Level Up Function                                    ✔
+Add Backpack for Hunter Level                                   ✔
+Make Spawners Mine-able and change spawn type on place          ✔
+Add Unlock Statistics to /perk <perk> if unlocked               ✔ - Removed since this is all shown in the new Menu
+Implement Egg Drop Feature for Hunter                           ✔ - % Chance to Drop a Mob's Spawn Egg upon killing it.
+Implement Enchanter Job Experience Gain                         ✔
+Add EXP Refund to Enchanter                                     ✔ - Refunds % of Used Experience (Only works at level 30 as of now, which is the only relevant level players enchant at)
+Add Currency System to Hide Features behind                     ✔ - Gold and Coin Currency
+Features to Hide - Spawner Silk Touch, Keep Inventory           ✔ - Unlock-able via Coins Currency
+Rewrite Unlock related code                                     ✔
+Add a way to earn Gold                                          ✔ - This is very bare bones right now, Will be changed later.
+Add Ability to gain Vanilla Experience Points from other perks  ✔ - Works fine but the In-game Animation can look a little scuffed. To be addressed later.
+Add Scoreboard to keep track of Perk Exp & Gold/Coin Balance    ✔
+Add Flight Time above Hot-Bar                                   ✔
+Fix Commands                                                    ✔ - Changed Commands to be through a Menu rather than chat box which causes a lot of cluttered code
+Create LootCrate command                                        ✔
+- command to give player x a key                                ✔
+- command to give player x a placeable loot crate               ✔
+- Add TabComplete                                               ✔ - Suggest Player valid arguments for the commands.
+ADD BETTER LOOT POOLS AND MORE KEYS                             ✔ - There were only 2 Loot pools prior to the current state, with all items having the same drop chance. Now contains a weighted system.
+
+Create A Server owner editable Config for Exp needed, prices,
+feature unlocks levels and more.                                ✖
+Add Boosters: Perk Experience, Gold, Vanilla Experience         ✖ - Boosters that run for x time and give a 1.5x to 2x boost to a specified gain.
+Add Vanilla Enchants OverLevel                                  ✖
+Add Dropped Items from Perks to be sellable for Gold            ✖ - This will also be found in the editable config
+
+
+Add Custom Enchants that are locked behind Enchanter Level      ✖ - Very in depth and complicated as the API I am using can not be used for this. Planned for much later.
