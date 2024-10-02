@@ -19,8 +19,6 @@ public class Miner {
         ///FUNCTION CALLED WHEN PLAYER IS MINING A BLOCK THAT IS REGISTERED
     public static int mine(Player player, UUID uuid, Block block, ItemStack tool){
         String job = "Miner";
-        int expMulti = MinerCollection.expMulti.get(block.getType());
-
 
         boolean veinMine = PlayerLevelHandler.getPlayerFeatureState(player, job, "Vein-Miner");
         boolean autoSmelt = PlayerLevelHandler.getPlayerFeatureState(player, job, "Auto-Smelt");
@@ -47,7 +45,7 @@ public class Miner {
         }
 
         ///RETURNS THE AMOUNT OF BLOCKS MINED MULTIPLIED WITH THE BLOCK TYPE'S EXP MULTIPLIER
-        return toBreak.size() * expMulti;
+        return toBreak.size();
     }
 
         ///THE FUNCTION THAT ACTUALLY HANDLES BREAKING THE BLOCK AND DROPPING EXPERIENCE AS WELL AS ITEMS

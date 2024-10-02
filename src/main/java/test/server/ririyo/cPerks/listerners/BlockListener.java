@@ -62,9 +62,9 @@ public class BlockListener implements Listener {
                 job = "Miner";
                 ItemStack tool = Objects.requireNonNull(player.getEquipment()).getItemInMainHand();
 
-                int exp = Miner.mine(player, uuid, startBlock, tool);
-                damageTool(player, tool, getToolDamage(tool, exp));
-                PlayerLevelHandler.addExperience(player, job, exp);
+                int brokenBlocks = Miner.mine(player, uuid, startBlock, tool);
+                damageTool(player, tool, getToolDamage(tool, brokenBlocks));
+                PlayerLevelHandler.addExperience(player, job, brokenBlocks * MinerCollection.expMulti.get(blockType));
             }
 
             ///EXECUTES FARMER LOGIC IF THE ITEM IS A CROP

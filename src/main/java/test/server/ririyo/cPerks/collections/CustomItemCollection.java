@@ -139,7 +139,7 @@ public class CustomItemCollection {
                 getTimeStrings(time),
                 null,
                 null,
-                FlightHandler.FlightKey,
+                NamespacedKeyCollection.FlightKey,
                 PersistentDataType.INTEGER,
                 time
         );
