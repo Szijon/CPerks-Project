@@ -65,7 +65,7 @@ public class PlayerLevelHandler {
             LootCrateHandler.getRandomLootKeyDrop(player);
         }
         int gold = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Gold"));
-        UserDataHandler.set(player, player.getUniqueId(), "Player.Gold", gold+1);
+        UserDataHandler.set(player, player.getUniqueId(), "Player.Gold", gold+amount);
         setPlayerTotalExperience(player, job, getPlayerTotalExperience(player, job) + amount);
         ScoreboardHandler.updateScoreboard(player, job);
     }
