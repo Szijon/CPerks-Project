@@ -16,10 +16,8 @@ public class EnchantListener implements Listener {
         String job = "Enchanter";
         Player player = event.getEnchanter();
         int enchantingLevel = event.getExpLevelCost(); /// Level Cost
-        int expLevelCost = event.getLevelHint(); /// Level Requirement
 
-        PlayerLevelHandler.addExperience(player, job, expLevelCost);
-        player.sendMessage(player.getExp() + " " + enchantingLevel);
+        PlayerLevelHandler.addExperience(player, job, enchantingLevel);
         boolean refunding = Boolean.parseBoolean(UserDataHandler.get(player, player.getUniqueId(), job + ".Refunding"));
         ExtraExperience.spawnExtraExp(player, event.getEnchantBlock().getLocation());
 

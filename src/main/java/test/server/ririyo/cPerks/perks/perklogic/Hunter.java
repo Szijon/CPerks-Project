@@ -33,7 +33,7 @@ public class Hunter {
         if(eggChance > 0 && AllPerksCollection.getRandomChance(eggChance)){
             ItemStack eggDrop = new ItemStack(HunterCollection.entityEgg.get(entity.getType()), 1);
             entity.getWorld().dropItemNaturally(entity.getLocation(), eggDrop);
-            PlayerMessageHandler.sendRareDropMessage(player, "Spawn-Egg");
+            PlayerMessageHandler.sendRareDropMessage(player, "Spawn-Egg", eggDrop.getAmount());
         }
     }
         ///LOADS BACKPACK CONTENTS FROM CONFIG AND OPENS THE INTERFACE FOR THE PLAYER IF UNLOCKED

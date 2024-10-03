@@ -58,11 +58,12 @@ public class ScoreboardHandler {
         if(exp >= 1000) {
             expStr = String.valueOf(exp / 1000);
             if (exp % 1000 / 10 > 0) {
-                if(exp % 1000 / 10 < 10){
+                if(exp % 1000 / 10 < 10) {
                     ///ADDS A .0 BEFORE SINGLE DIGITS
                     expStr = expStr + ".0" + exp % 1000 / 10 + "k";
+                } else {
+                    expStr = expStr + "." + exp % 1000 / 10 + "k";
                 }
-                expStr = expStr + "." + exp % 1000 / 10 + "k";
             } else {
                 expStr = expStr + "k";
             }

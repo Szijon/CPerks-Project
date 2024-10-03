@@ -16,12 +16,30 @@ import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
 import test.server.ririyo.cPerks.configs.BlockDataHandler;
 import test.server.ririyo.cPerks.handlers.PlayerMessageHandler;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
+import java.util.*;
 
 public class LootCrateHandler {
+
+    public static class LimitedQueue<T> {
+        private final Queue<LootPoolCollection.WeightedDrop> queue;
+        private final int maxSize;
+
+        public LimitedQueue(int size){
+            queue = new LinkedList<>();
+            this.maxSize = size;
+        }
+
+        public void add(LootPoolCollection.WeightedDrop drop){
+            if(queue.size() >= maxSize){
+                queue.poll();
+            }
+            queue.offer(drop);
+        }
+
+        public LootPoolCollection.WeightedDrop get(){
+            return queue.peek();
+        }
+    }
 
     ///GIVES SPECIFIED PLAYER A LOOT CRATE BLOCK
     public static void giveLootCrateBlock(Player player, int amount){
@@ -33,7 +51,7 @@ public class LootCrateHandler {
     }
 
     ///GETS A RANDOM ITEM FROM A SPECIFIED LOOT POOL
-    public static ItemStack getRandomDrop(List<LootPoolCollection.WeightedDrop> dropPool){
+    public static LootPoolCollection.WeightedDrop getRandomDrop(List<LootPoolCollection.WeightedDrop> dropPool){
         int totalWeight = 0;
         for(LootPoolCollection.WeightedDrop drop : dropPool){
             totalWeight += drop.weight();
@@ -46,7 +64,7 @@ public class LootCrateHandler {
         for(LootPoolCollection.WeightedDrop drop : dropPool){
             cumulativeWeight += drop.weight();
             if(dropIndex < cumulativeWeight) {
-                return drop.item();
+                return drop;
             }
         }
         ///THIS SHOULD NEVER HAPPEN.
@@ -76,20 +94,25 @@ public class LootCrateHandler {
         } else {
             pool = LootPoolCollection.normalLootPool;
         }
+        LimitedQueue queue = new LimitedQueue(5);
         ///SETS CENTER ROW TO BE RANDOM SELECTED ITEMS FROM LOOT POOL
         for (int i = 9; i < 18; i++) {
-            lootBoxInv.setItem(i, getRandomDrop(pool));
+            LootPoolCollection.WeightedDrop drop = getRandomDrop(pool);
+            lootBoxInv.setItem(i, drop.item());
+            if(i > 13){
+                queue.add(drop);
+            }
         }
         ///FINALLY OPENS THE INVENTORY FOR THE PLAYER TO WATCH THE SELECTION
         player.openInventory(lootBoxInv);
         player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Loot-Crate"));
-        rotateLootItems(player, lootBoxInv, pool, 0, 1);
+        rotateLootItems(player, lootBoxInv, pool, 0, 1, queue, type);
     }
 
         ///ROTATES THE ITEMS AS TO IMITATE AN ANIMATION OF THE ITEM BEING SELECTED.
-    private static void rotateLootItems(Player player, Inventory lootBoxInventory, List<LootPoolCollection.WeightedDrop> pool, int cycle, int delay) {
+    private static void rotateLootItems(Player player, Inventory lootBoxInventory, List<LootPoolCollection.WeightedDrop> pool, int cycle, int delay, LimitedQueue queue, String crateType) {
         if (cycle >= 70) {
-            giveFinalLoot(player, lootBoxInventory);
+            giveFinalLoot(player, queue, crateType);
             return;
         }
 
@@ -98,7 +121,9 @@ public class LootCrateHandler {
         }
 
         /// Add new Random item to the right hand side.
-        lootBoxInventory.setItem(17, getRandomDrop(pool));
+        LootPoolCollection.WeightedDrop drop = getRandomDrop(pool);
+        lootBoxInventory.setItem(17, drop.item());
+        queue.add(drop);
 
         player.updateInventory();
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.2f, 1);
@@ -106,13 +131,18 @@ public class LootCrateHandler {
         new BukkitRunnable() {
             @Override
             public void run() {
-                rotateLootItems(player, lootBoxInventory, pool, cycle + 1, calculateNewDelay(cycle, delay));
+                rotateLootItems(player, lootBoxInventory, pool, cycle + 1, calculateNewDelay(cycle, delay), queue, crateType);
             }
         }.runTaskLater(CPerks.getInstance(), delay);
     }
     ///GIVES THE PLAYER THE ITEM AT THE CENTER OF THE INTERFACE
-    private static void giveFinalLoot(Player player, Inventory lootBoxInventory) {
-        ItemStack finalLoot = lootBoxInventory.getItem(13);
+    private static void giveFinalLoot(Player player, LimitedQueue queue, String crateType) {
+        ItemStack finalLoot = queue.get().item();
+        if(queue.get().weight() <= 250){
+            PlayerMessageHandler.broadcastRareDrop(player, queue.get().item(), true, crateType + " Crate");
+        } else if(queue.get().weight() <= 1000){
+            PlayerMessageHandler.broadcastRareDrop(player, queue.get().item(), false, crateType + " Crate");
+        }
         if (finalLoot != null) {
             if(player.getInventory().firstEmpty() != -1) {
                 player.getInventory().addItem(finalLoot);
@@ -164,24 +194,27 @@ public class LootCrateHandler {
     }
         ///USED WHEN A PLAYER TRIGGERS THE 0.033% OF DROPPING A KEY TO GIVE THEM A RANDOM KEY FROM A LOOT POOL
     public static void getRandomLootKeyDrop(Player player){
-        ItemStack key = LootCrateHandler.getRandomDrop(LootPoolCollection.keyLootPool);
+        ItemStack key = LootCrateHandler.getRandomDrop(LootPoolCollection.keyLootPool).item();
         ItemMeta meta = key.getItemMeta();
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         String keyType = pdc.get(NamespacedKeyCollection.LootCrateKeyKey, PersistentDataType.STRING);
         Objects.requireNonNull(player.getLocation().getWorld()).dropItemNaturally(player.getLocation(), key);
+        String origin = "Perk Drop";
 
         ///BROADCASTS A MESSAGE IF THE KEY THEY DROPPED IS EXTRAORDINARILY RARE
-        if(keyType.equalsIgnoreCase("Gear")){
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + ChatColor.DARK_PURPLE + " has dropped a " + keyType + " Key! (0.00125%");
-            for (Player p : Bukkit.getOnlinePlayers()){
-                p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
-            }
-        } else if(keyType.equalsIgnoreCase("Legendary")){
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + ChatColor.DARK_PURPLE +  " has dropped a " + keyType + " Key! (0.00875%)");
-        } else if(keyType.equalsIgnoreCase("Rare") && key.getAmount() == 5){
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + ChatColor.DARK_PURPLE + " has dropped 5 " + keyType + " Keys! (0.00375%)");
-        } else {
-            PlayerMessageHandler.sendRareDropMessage(player, meta.getDisplayName());
+        switch(keyType){
+            case "Gear":
+                PlayerMessageHandler.broadcastRareDrop(player, key, true, origin);
+                break;
+            case "Legendary":
+                PlayerMessageHandler.broadcastRareDrop(player, key, false, origin);
+                break;
+            case "Rare", "Normal":
+                if(key.getAmount() > 1)
+                    PlayerMessageHandler.broadcastRareDrop(player, key, false, origin);
+                break;
         }
+        ///SEND MESSAGE TO PLAYER TO NOTIFY THEM.
+        PlayerMessageHandler.sendRareDropMessage(player, meta.getDisplayName(), key.getAmount());
     }
 }

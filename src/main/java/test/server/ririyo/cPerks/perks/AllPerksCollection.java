@@ -133,6 +133,20 @@ public class AllPerksCollection {
         lore.add(ChatColor.BLUE + "Unlock Level: " + ChatColor.GREEN + featureLevels.get(unlock));
         lore.add(ChatColor.BLUE + featureDescription.get(perk + "." + unlock));
         lore.add(ChatColor.BLUE + "Unlocked: " + unlockedString);
+
+            ///ADDS MORE TO THE DESCRIPTION IF FEATURE HAS A CONNECTED AMOUNT OR CHANCE
+        switch(unlock){
+            case "Vein-Miner":
+                lore.add(ChatColor.BLUE + "Amount: " + ChatColor.GREEN + Math.round(Float.parseFloat(UserDataHandler.get(player, player.getUniqueId(), perk + ".Vein-Miner-Amount")))  + " Blocks");
+                break;
+            case "Refunding":
+                lore.add(ChatColor.BLUE + "Amount: " + ChatColor.GREEN + UserDataHandler.get(player, player.getUniqueId(), perk + ".Refunding-Amount") + "%");
+                break;
+            case "Egg-Hunter":
+                lore.add(ChatColor.BLUE + "Chance: " + ChatColor.GREEN + UserDataHandler.get(player, player.getUniqueId(), perk + ".Egg-Hunter-Chance") + "%");
+                break;
+        }
+
         lore.add(" ");
         lore.add(ChatColor.BLUE + "State: " + state);
 

@@ -2,12 +2,14 @@ package test.server.ririyo.cPerks.handlers;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import test.server.ririyo.cPerks.perks.perkmenu.MenuCollection;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
-import test.server.ririyo.cPerks.perks.features.TimeHandler;
+import test.server.ririyo.cPerks.perks.features.FormatHandler;
 
 public class PlayerMessageHandler {
 
@@ -65,13 +67,24 @@ public class PlayerMessageHandler {
         player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 0.5f, 1);
     }
         ///SENDS A MESSAGE WHEN THE PLAYER DROPS A RARE ITEM LIKE A LOOT-KEY(0.033%) OR A SPAWN-EGG(LEVEL 15 HUNTER 0.1%)
-    public static void sendRareDropMessage(Player player, String item){
-        player.sendMessage(PURPLE + "RARE!" + " You've dropped a " + item + "!");
+    public static void sendRareDropMessage(Player player, String item, int amount){
+        player.sendMessage(PURPLE + "RARE!" + " You've dropped " + amount + " " + item + "!");
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
     }
         ///SENDS A MESSAGE TO A PLAYER WHEN THEY USE THE COMMAND /FLIGHT TIME OR THEY ADD MORE FLIGHT TIME BY USING A FLIGHT CREDIT ITEM
     public static void sendFlightTime(Player player){
-        int[] time = TimeHandler.getTime(Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Flight-Time")));
+        int[] time = FormatHandler.getTime(Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Flight-Time")));
         player.sendMessage(BLUE + "Flight Time: " + GREEN + time[0] +"h " + time[1] + "m " + time[2] + "s" );
+    }
+        ///BROADCASTS AN ITEM DROP TO EVERY PLAYER ON THE SERVER AND PLAYS SOUND IF IT'S CONSIDERED VERY RARE
+    public static void broadcastRareDrop(Player player, ItemStack item, boolean veryRare, String origin){
+        if(veryRare){
+            Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "SUPER RARE!!! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + item.getAmount() + " " + item.getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin + ChatColor.BLUE + "!");
+            for(Player p : Bukkit.getOnlinePlayers()){
+                p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.25f, 1);
+            }
+        } else {
+            Bukkit.broadcastMessage(ChatColor.AQUA + "RARE! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + item.getAmount() + " " + item.getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin + ChatColor.BLUE + "!");
+        }
     }
 }

@@ -55,7 +55,7 @@ public class FlightHandler {
                     cancel();
                 } else {
                     timeLeft.put(player.getUniqueId(), remainingTime - 1);
-                    int[] time = TimeHandler.getTime(timeLeft.get(player.getUniqueId()));
+                    int[] time = FormatHandler.getTime(timeLeft.get(player.getUniqueId()));
                     String message = ChatColor.BLUE + "Flight-Time: " + ChatColor.GREEN + (time[0] * 24 + time[1]) + "h " + time[2] + "m " + time[3] + "s";
                     PlayerMessageHandler.sendActionBarMessage(player, message);
                 }

@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,7 +34,7 @@ public class Miner {
 
         ///MINES THE BLOCK AND CHECKS FOR AUTO SMELT FEATURE TO CONVERT THE DROPS
         for(Block blockToBreak : toBreak){
-            if(autoSmelt && MinerCollection.AutoSmeltConverter.containsKey(blockToBreak.getDrops().stream().findFirst().get().getType())) {
+            if(autoSmelt && MinerCollection.AutoSmeltConverter.containsKey(blockToBreak.getDrops().stream().findFirst().get().getType()) && !tool.containsEnchantment(Enchantment.SILK_TOUCH)) {
                 dropType = MinerCollection.AutoSmeltConverter.get(blockToBreak.getDrops(tool).stream().findFirst().get().getType());
             }
             else{

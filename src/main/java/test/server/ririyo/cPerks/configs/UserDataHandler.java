@@ -70,7 +70,12 @@ public class UserDataHandler {
     public static String getPlayerGoldString(Player player){
         int gold = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Gold"));
         if(gold >= 1000){
-            return gold/1000 + "." + gold%1000/10 + "k";
+            if(gold % 1000 / 10 < 10) {
+                ///ADDS A .0 BEFORE SINGLE DIGITS
+                return gold / 1000 + ".0" + (gold % 1000 / 10) + "k";
+            } else {
+                return gold / 1000 + "." + (gold % 1000 / 10) + "k";
+            }
         } else {
             return String.valueOf(gold);
         }

@@ -74,6 +74,9 @@ public class PlayerLevelHandler {
         int level = getPlayerLevel(player, job);
         int exp = getPlayerExperience(player, job);
         int levelUp = getPlayerLevelUpExp(player, job);
+        if(job.equalsIgnoreCase("Farmer")){
+            levelUp /= 2;
+        }
 
         UserDataHandler.setPlayerCoins(player, UserDataHandler.getPlayerCoins(player)+10);
 

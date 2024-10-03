@@ -1,5 +1,6 @@
 package test.server.ririyo.cPerks.perks.features;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -28,5 +29,10 @@ public class SilkTouchSpawners {
         player.setLevel(0);
         player.setExp(0);
         player.giveExp(prevExp-1395);
+    }
+
+    public static String getSpawnerName(EntityType entityType){
+        String entityName = entityType.name();
+        return ChatColor.DARK_PURPLE + FormatHandler.convertString(entityName) + " Spawner";
     }
 }

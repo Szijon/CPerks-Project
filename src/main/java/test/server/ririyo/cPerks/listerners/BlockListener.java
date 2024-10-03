@@ -108,7 +108,7 @@ public class BlockListener implements Listener {
         Block targetBlock = event.getBlock();
 
             ///IF THE SPAWNER IS A CUSTOM SPAWNER (FROM SILK TOUCH MINED OR LOOT CRATE) CHANGES MOB AS SPAWNER IS EMPTY BY DEFAULT
-        if(targetBlock.getType() == Material.SPAWNER && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(CPerks.getInstance(), "SpawnerType"))){
+        if(targetBlock.getType() == Material.SPAWNER && item.getItemMeta().getPersistentDataContainer().has(NamespacedKeyCollection.SpawnerKey)){
             ItemMeta itemMeta = item.getItemMeta();
             PersistentDataContainer spawnerDC = itemMeta.getPersistentDataContainer();
             String entityType = spawnerDC.get(NamespacedKeyCollection.SpawnerKey, PersistentDataType.STRING);

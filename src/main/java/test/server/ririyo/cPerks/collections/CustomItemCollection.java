@@ -13,8 +13,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
 import test.server.ririyo.cPerks.perks.AllPerksCollection;
-import test.server.ririyo.cPerks.perks.features.FlightHandler;
-import test.server.ririyo.cPerks.perks.features.TimeHandler;
+import test.server.ririyo.cPerks.perks.features.SilkTouchSpawners;
+import test.server.ririyo.cPerks.perks.features.FormatHandler;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ public class CustomItemCollection {
     ///COLLECTION OF ALL SORTS OF CUSTOM ITEMS. USED IN MENU DISPLAYING.
 
     ///FUNCTION TO CREATE BASIC CUSTOM ITEM WITH ABILITY TO CHANGE NAME AND ADDING ENCHANTMENTS BUT NOT USABLE FOR FUNCTIONS
-    public static ItemStack createSimpleCustomItem(Material material, int amount, String displayName, Map<Enchantment, Integer> enchantments){
+    public static ItemStack createSimpleCustomItem(Material material, int amount, String displayName, Map<Enchantment, Integer> enchantments, boolean loreEnchantments){
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         if(meta != null){
@@ -30,8 +30,17 @@ public class CustomItemCollection {
                 meta.setDisplayName(displayName);
             }
             if(enchantments != null) {
+                List<String> enchantLore = new ArrayList<>(List.of());
                 for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                     meta.addEnchant(entry.getKey(), entry.getValue(), true);
+                    if(loreEnchantments) {
+                        String enchantmentName = entry.getKey().getKey().getKey();
+                        enchantLore.add(FormatHandler.convertString(enchantmentName) + " " + entry.getValue());
+                    }
+                }
+                if(loreEnchantments) {
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    meta.setLore(enchantLore);
                 }
             }
             item.setItemMeta(meta);
@@ -121,7 +130,7 @@ public class CustomItemCollection {
         return createCustomItem(
                 Material.SPAWNER,
                 1,
-                ChatColor.DARK_PURPLE + entityType.name().substring(0, 1).toUpperCase() + entityType.name().substring(1).toLowerCase() + " Spawner",
+                SilkTouchSpawners.getSpawnerName(entityType),
                 null,
                 null,
                 List.of(ItemFlag.HIDE_ADDITIONAL_TOOLTIP),
@@ -151,7 +160,8 @@ public class CustomItemCollection {
                 Material.GRAY_STAINED_GLASS_PANE,
                 1,
                 " ",
-                null
+                null,
+                false
         );
     }
         ///PERK SHOP SHOWS ITEM TO GET TO GOLD & COIN SHOP
@@ -249,7 +259,7 @@ public class CustomItemCollection {
     ///METHODS TO CHANGE ITEM DESCRIPTIONS
         ///TIME FORMATTING FROM SECONDS TO >> DAYS-HOURS-MINUTES-SECONDS <<
     private static List<String> getTimeStrings(int time) {
-        int[] formattedTime = TimeHandler.getTime(time);
+        int[] formattedTime = FormatHandler.getTime(time);
 
         List<String> lore = new ArrayList<>();
         lore.add("");
