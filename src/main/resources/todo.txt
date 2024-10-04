@@ -43,8 +43,3 @@ Add Dropped Items from Perks to be sellable for Gold            ✖ - This will 
 
 
 Add Custom Enchants that are locked behind Enchanter Level      ✖ - Very in depth and complicated as the API I am using can not be used for this. Planned for much later.
-
-
-BUGS:
-Move ScoreboardHandler format function to FormatHandler
-Move Custom Items in PerkMenuCollection to CustomItemCollection

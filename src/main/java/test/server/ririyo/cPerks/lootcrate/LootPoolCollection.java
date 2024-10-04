@@ -18,13 +18,13 @@ public class LootPoolCollection {
         ///WEIGHTED LOOT POOLS TO NOT MAKE EVERY ITEM THE SAME CHANCE TO DROP
     public static List<WeightedDrop> keyLootPool = Arrays.asList(
             ///USED FOR GETTING A RANDOM KEY ON TRIGGERING 0.01% DROP CHANCE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Normal"), 10000),
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Rare"), 8000),
-            new WeightedDrop(CustomItemCollection.createLootKey(5, "Normal"), 4500),
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 3500),
-            new WeightedDrop(CustomItemCollection.createLootKey(5, "Rare"), 1500),
+            new WeightedDrop(CustomItemCollection.createLootKey(1, "Normal"), 4000),
+            new WeightedDrop(CustomItemCollection.createLootKey(1, "Rare"), 3000),
+            new WeightedDrop(CustomItemCollection.createLootKey(5, "Normal"), 2500),
+            new WeightedDrop(CustomItemCollection.createLootKey(5, "Rare"), 1000),
+            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 500),
             ///OVERALL CHANCE TO DROP: 0.00125%
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Tools"), 500)
+            new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 250)
     );
 
     public static List<WeightedDrop> normalLootPool = Arrays.asList(

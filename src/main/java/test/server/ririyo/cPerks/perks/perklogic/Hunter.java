@@ -29,7 +29,7 @@ public class Hunter {
     }
         ///IF THE CHANCE IS HIT DROPS A SPAWN EGG OF THE MOB THAT WAS KILLED
     public static void eggHunter(Player player, Entity entity){
-        int eggChance = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Hunter.Egg-Hunter-Chance"));
+        int eggChance = Math.round(Float.parseFloat(UserDataHandler.get(player, player.getUniqueId(), "Hunter.Egg-Hunter-Chance")));
         if(eggChance > 0 && AllPerksCollection.getRandomChance(eggChance)){
             ItemStack eggDrop = new ItemStack(HunterCollection.entityEgg.get(entity.getType()), 1);
             entity.getWorld().dropItemNaturally(entity.getLocation(), eggDrop);

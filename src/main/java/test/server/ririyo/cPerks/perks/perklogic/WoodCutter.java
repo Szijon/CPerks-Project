@@ -25,7 +25,7 @@ public class WoodCutter {
 
             ///CHECKS FOR VEIN MINER UNLOCK
         if(veinMine && Arrays.asList(WoodCutterCollection.tools).contains(tool.getType())) {
-            int maximumBlocks = Integer.parseInt(UserDataHandler.get(player, uuid, job + ".Vein-Miner-Amount"));
+            int maximumBlocks = Math.round(Float.parseFloat(UserDataHandler.get(player, uuid, job + ".Vein-Miner-Amount")));
             int brokenBlocks;
             Set<Block> toBreak = getBlocksToBreak(block, maximumBlocks);
             for (Block blockToBreak : toBreak) {
@@ -35,13 +35,13 @@ public class WoodCutter {
                     if (blockToBreak.getWorld().getBlockAt(blockToBreak.getLocation().add(new Vector(0, -1, 0))).getType() == Material.DIRT || blockToBreak.getWorld().getBlockAt(blockToBreak.getLocation().add(new Vector(0, -1, 0))).getType() == Material.GRASS_BLOCK) {
                         /// BLOCK BELOW IS DIRT OR GRASS
                         blockToBreak.setType(WoodCutterCollection.saplingMatch.get(woodType));
-                        ExtraExperience.spawnExtraExp(player, blockToBreak.getLocation());
+
                     }
                 }
-
+                ExtraExperience.spawnExtraExp(player, blockToBreak.getLocation());
+            }
             brokenBlocks = toBreak.size();
             return brokenBlocks;
-        }
             ///BREAKS BLOCK NORMALLY IF PLAYER DOESN'T HAVE VEIN MINER UNLOCKED
         } else {
             block.breakNaturally();

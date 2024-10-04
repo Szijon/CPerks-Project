@@ -220,9 +220,11 @@ public class MenuHandler {
                 }
             }
         }
-        player.sendMessage(ChatColor.BLUE + "You've Sold Items worth " + ChatColor.GREEN + goldAmount + " Gold");
-        UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) + goldAmount);
-        ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
+        if(goldAmount > 0) {
+            player.sendMessage(ChatColor.BLUE + "You've Sold Items worth " + ChatColor.GREEN + goldAmount + " Gold");
+            UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) + goldAmount);
+            ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
+        }
     }
 
     /// ALL SHOPS
@@ -266,7 +268,7 @@ public class MenuHandler {
                 else
                     player.getLocation().getWorld().dropItemNaturally(player.getLocation(), CustomItemCollection.createLootKey(1, "Normal"));
                 PlayerMessageHandler.sendPurchaseSuccessMessage(player, item.getItemMeta().getDisplayName());
-                ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
+
             }
 
             if (itemName.equalsIgnoreCase("Flight Credit")) {
@@ -279,6 +281,7 @@ public class MenuHandler {
             }
 
             UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) - price);
+            ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
             return true;
         } else {
             PlayerMessageHandler.sendPurchaseFailureMessage(player, itemName);

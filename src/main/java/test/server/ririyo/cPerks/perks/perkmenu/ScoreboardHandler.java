@@ -83,9 +83,9 @@ public class ScoreboardHandler {
             levelUpStr = String.valueOf(levelUp / 1000);
             if (exp % 1000 / 10 < 10) {
                 ///ADDS A .0 BEFORE SINGLE DIGITS
-                levelUpStr = levelUpStr + ".0" + exp % 1000 / 10 + "k";
+                levelUpStr = levelUpStr + ".0" + levelUp % 1000 / 10 + "k";
             } else {
-                levelUpStr = levelUpStr + "." + exp % 1000 / 10 + "k";
+                levelUpStr = levelUpStr + "." + levelUp % 1000 / 10 + "k";
             }
         } else {
             levelUpStr = String.valueOf(levelUp);

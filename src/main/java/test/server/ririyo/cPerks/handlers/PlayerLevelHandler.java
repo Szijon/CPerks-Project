@@ -83,7 +83,7 @@ public class PlayerLevelHandler {
         setPlayerExperience(player, job, exp - levelUp);
 
         int neededLevelUpExp = AllPerksCollection.levelUps.get(level);
-        if(job.equalsIgnoreCase("Farmer")){
+        if(job.equalsIgnoreCase("Farmer") || job.equalsIgnoreCase("Woodcutter")){
              neededLevelUpExp /= 2;
         }
         setPlayerLevelUpExp(player, job, neededLevelUpExp);

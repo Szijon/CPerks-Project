@@ -71,11 +71,40 @@ public class LootCrateHandler {
         return null;
     }
 
+        ///MATCHES A LOOT POOL TO A TYPE OF KEY
+    public static List<LootPoolCollection.WeightedDrop> getPool(String type){
+        if(type.equalsIgnoreCase("Rare")){
+            return LootPoolCollection.rareLootPool;
+        } else if(type.equalsIgnoreCase("Legendary")){
+            return LootPoolCollection.legendaryLootPool;
+        } else if(type.equalsIgnoreCase("Gear")){
+            return LootPoolCollection.gearLootPool;
+        } else {
+            return LootPoolCollection.normalLootPool;
+        }
+    }
+
+    public static void openCratesInstantly(Player player, String type, int amount){
+        List<LootPoolCollection.WeightedDrop> pool = getPool(type);
+
+        for (int i = 0; i < amount; i++) {
+            LootPoolCollection.WeightedDrop loot = getRandomDrop(pool);
+            if (player.getInventory().firstEmpty() != -1) {
+                player.getInventory().addItem(loot.item());
+            } else {
+                player.getWorld().dropItemNaturally(player.getLocation(), loot.item());
+            }
+            String origin = type + " Crate";
+            PlayerMessageHandler.broadcastRareDrop(player, loot, origin);
+        }
+    }
+
     ///OPENS THE LOOT BOX INTERFACE AND POPULATES IT WITH RANDOM ITEMS AS WELL AS A SURROUNDING BORDER.
     public static void openLootBoxGUI(Player player, String type) {
         Inventory lootBoxInv = Bukkit.createInventory(null, 27,  ChatColor.GOLD + type + " Loot Box");
 
-        List<LootPoolCollection.WeightedDrop> pool;
+        List<LootPoolCollection.WeightedDrop> pool = getPool(type);
+        LimitedQueue queue = new LimitedQueue(5);
 
         /// SETS SURROUNDING SLOTS TO RED PANES FOR AESTHETICS
         for (int i = 0; i < lootBoxInv.getSize(); i++){
@@ -84,17 +113,7 @@ public class LootCrateHandler {
         /// SETS MIDDLE TOP & BOTTOM TO GREEN PANES TO HIGHLIGHT FINAL LOOT ITEM
         lootBoxInv.setItem(4, new ItemStack(Material.GREEN_STAINED_GLASS_PANE));
         lootBoxInv.setItem(22, new ItemStack(Material.GREEN_STAINED_GLASS_PANE));
-        ///SETS THE LOOT POOL
-        if(type.equalsIgnoreCase("Rare")){
-            pool = LootPoolCollection.rareLootPool;
-        } else if(type.equalsIgnoreCase("Legendary")){
-            pool = LootPoolCollection.legendaryLootPool;
-        } else if(type.equalsIgnoreCase("Gear")){
-            pool = LootPoolCollection.gearLootPool;
-        } else {
-            pool = LootPoolCollection.normalLootPool;
-        }
-        LimitedQueue queue = new LimitedQueue(5);
+
         ///SETS CENTER ROW TO BE RANDOM SELECTED ITEMS FROM LOOT POOL
         for (int i = 9; i < 18; i++) {
             LootPoolCollection.WeightedDrop drop = getRandomDrop(pool);
@@ -138,11 +157,7 @@ public class LootCrateHandler {
     ///GIVES THE PLAYER THE ITEM AT THE CENTER OF THE INTERFACE
     private static void giveFinalLoot(Player player, LimitedQueue queue, String crateType) {
         ItemStack finalLoot = queue.get().item();
-        if(queue.get().weight() <= 250){
-            PlayerMessageHandler.broadcastRareDrop(player, queue.get().item(), true, crateType + " Crate");
-        } else if(queue.get().weight() <= 1000){
-            PlayerMessageHandler.broadcastRareDrop(player, queue.get().item(), false, crateType + " Crate");
-        }
+        PlayerMessageHandler.broadcastRareDrop(player, queue.get(),  crateType + " Crate");
         if (finalLoot != null) {
             if(player.getInventory().firstEmpty() != -1) {
                 player.getInventory().addItem(finalLoot);
@@ -184,37 +199,39 @@ public class LootCrateHandler {
 
                 if (pdc.has(NamespacedKeyCollection.LootCrateKeyKey)) {
                     String type = pdc.get(NamespacedKeyCollection.LootCrateKeyKey, PersistentDataType.STRING);
-                    item.setAmount(item.getAmount() - 1);
-                    LootCrateHandler.openLootBoxGUI(player, type);
-                    player.sendMessage(ChatColor.BLUE + "Opening Loot Crate!");
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1);
+                    if(player.isSneaking()) {
+                        int initialAmount = item.getAmount();
+                        int amount;
+                            ///HARD CAP CRATES TO OPEN AT 10
+                        if(initialAmount > 10){
+                            amount = 10;
+                        } else {
+                            amount = initialAmount;
+                        }
+                        item.setAmount(initialAmount - amount);
+                        LootCrateHandler.openCratesInstantly(player, type, amount);
+                    } else {
+                        item.setAmount(item.getAmount() - 1);
+                        LootCrateHandler.openLootBoxGUI(player, type);
+                        player.sendMessage(ChatColor.BLUE + "Opening " + type + " Loot Crate!");
+                        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1);
+                    }
                 }
             }
         }
     }
         ///USED WHEN A PLAYER TRIGGERS THE 0.033% OF DROPPING A KEY TO GIVE THEM A RANDOM KEY FROM A LOOT POOL
     public static void getRandomLootKeyDrop(Player player){
-        ItemStack key = LootCrateHandler.getRandomDrop(LootPoolCollection.keyLootPool).item();
-        ItemMeta meta = key.getItemMeta();
+        LootPoolCollection.WeightedDrop key = getRandomDrop(LootPoolCollection.keyLootPool);
+        ItemStack keyItem = key.item();
+        ItemMeta meta = keyItem.getItemMeta();
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        String keyType = pdc.get(NamespacedKeyCollection.LootCrateKeyKey, PersistentDataType.STRING);
-        Objects.requireNonNull(player.getLocation().getWorld()).dropItemNaturally(player.getLocation(), key);
+        Objects.requireNonNull(player.getLocation().getWorld()).dropItemNaturally(player.getLocation(), keyItem);
         String origin = "Perk Drop";
 
-        ///BROADCASTS A MESSAGE IF THE KEY THEY DROPPED IS EXTRAORDINARILY RARE
-        switch(keyType){
-            case "Gear":
-                PlayerMessageHandler.broadcastRareDrop(player, key, true, origin);
-                break;
-            case "Legendary":
-                PlayerMessageHandler.broadcastRareDrop(player, key, false, origin);
-                break;
-            case "Rare", "Normal":
-                if(key.getAmount() > 1)
-                    PlayerMessageHandler.broadcastRareDrop(player, key, false, origin);
-                break;
-        }
+        PlayerMessageHandler.broadcastRareDrop(player, key, origin);
+
         ///SEND MESSAGE TO PLAYER TO NOTIFY THEM.
-        PlayerMessageHandler.sendRareDropMessage(player, meta.getDisplayName(), key.getAmount());
+        PlayerMessageHandler.sendRareDropMessage(player, meta.getDisplayName(), keyItem.getAmount());
     }
 }
