@@ -1,6 +1,7 @@
 test\server\ririyo\cPerks\listerners\MobKillListener.class
 test\server\ririyo\cPerks\lootcrate\LootCrateHandler.class
 test\server\ririyo\cPerks\lootcrate\LootCrateHandler$2.class
+test\server\ririyo\cPerks\perks\perkmenu\SaleMenuCollection.class
 test\server\ririyo\cPerks\listerners\PlayerJoinListener.class
 test\server\ririyo\cPerks\perks\perklogic\Miner.class
 test\server\ririyo\cPerks\perks\perklogic\FarmerCollection.class

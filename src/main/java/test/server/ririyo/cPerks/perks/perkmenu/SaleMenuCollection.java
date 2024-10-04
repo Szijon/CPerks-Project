@@ -52,6 +52,7 @@ public class SaleMenuCollection {
             Map.entry(Material.POTATO, 6),
             Map.entry(Material.CARROT, 6),
             Map.entry(Material.WHEAT, 12),
+            Map.entry(Material.HAY_BLOCK, 108),
             Map.entry(Material.BEETROOT, 6),
             Map.entry(Material.PUMPKIN, 12),
             Map.entry(Material.MELON_SLICE, 2),

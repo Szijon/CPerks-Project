@@ -46,6 +46,5 @@ Add Custom Enchants that are locked behind Enchanter Level      ✖ - Very in de
 
 
 BUGS:
-Exp is not being deducted properly upon silk touch mining a spawner.
 Move ScoreboardHandler format function to FormatHandler
 Move Custom Items in PerkMenuCollection to CustomItemCollection

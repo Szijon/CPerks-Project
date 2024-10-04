@@ -124,7 +124,7 @@ public class MenuHandler {
         inventory.setItem(5 + 9*2, PerkMenuCollection.getKeepExpItem(player));
         inventory.setItem(7 + 9*2, PerkMenuCollection.getFlightItem(player));
 
-        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Coin Shop"));
+        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Coin-Shop"));
         player.updateInventory();
     }
 
@@ -172,7 +172,7 @@ public class MenuHandler {
         inventory.setItem(3 + 9*2, PerkMenuCollection.getLootKeyShopItem());
         inventory.setItem(5 + 9*2, PerkMenuCollection.getFlightCreditShopItem());
 
-        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Gold Shop"));
+        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Gold-Shop"));
         player.updateInventory();
     }
 
@@ -206,11 +206,11 @@ public class MenuHandler {
 
     public static void processSellingInterfaceClosure(Player player, Inventory inventory){
         Inventory playerInventory = player.getInventory();
-
+        int goldAmount = 0;
         for(ItemStack item : inventory.getContents()){
             if(item != null) {
                 if (SaleMenuCollection.prices.containsKey(item.getType())) {
-                    UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) + SaleMenuCollection.prices.get(item.getType()));
+                    goldAmount += SaleMenuCollection.prices.get(item.getType()) * item.getAmount();
                 } else {
                     if (player.getInventory().firstEmpty() != -1) {
                         playerInventory.addItem(item);
@@ -220,6 +220,8 @@ public class MenuHandler {
                 }
             }
         }
+        player.sendMessage(ChatColor.BLUE + "You've Sold Items worth " + ChatColor.GREEN + goldAmount + " Gold");
+        UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) + goldAmount);
         ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
     }
 
