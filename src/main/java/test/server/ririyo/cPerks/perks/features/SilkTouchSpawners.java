@@ -25,10 +25,10 @@ public class SilkTouchSpawners {
 
         ///DEDUCTS THE PLAYER EXPERIENCE WORTH 30 LEVELS FOR MINING A SPAWNER WITH SILK-TOUCH
         int prevExp = player.getTotalExperience();
-        player.setTotalExperience(0);
         player.setLevel(0);
         player.setExp(0);
-        player.giveExp(prevExp-1395);
+        player.setTotalExperience(0);
+        player.giveExp(prevExp-1395); ///1395 is the exact amount of exp needed to become lv 30
     }
 
     public static String getSpawnerName(EntityType entityType){

@@ -39,7 +39,7 @@ public class Hunter {
         ///LOADS BACKPACK CONTENTS FROM CONFIG AND OPENS THE INTERFACE FOR THE PLAYER IF UNLOCKED
     public static void openBackpack(Player player){
         if(Boolean.parseBoolean(UserDataHandler.get(player, player.getUniqueId(), "Hunter.Backpack"))){
-            Inventory inventory = Bukkit.createInventory(player, Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Hunter.Backpack-Size")), ChatColor.DARK_PURPLE + "Backpack");
+            Inventory inventory = Bukkit.createInventory(player, Math.round(Float.parseFloat(UserDataHandler.get(player, player.getUniqueId(), "Hunter.Backpack-Size"))), ChatColor.DARK_PURPLE + "Backpack");
             if(!Objects.equals(UserDataHandler.get(player, player.getUniqueId(), "Backpack"), "0")){
                 inventory.setContents(UserDataHandler.getBackpack(player, player.getUniqueId()));
             }

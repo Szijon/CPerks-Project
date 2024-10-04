@@ -2,6 +2,7 @@ package test.server.ririyo.cPerks.perks.perkmenu;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -56,6 +57,8 @@ public class MenuHandler {
         inv.setItem(4 + 9*4, CustomItemCollection.getFeatureItem(player, "Farmer", "Replant"));
         inv.setItem(5 + 9*4, CustomItemCollection.getFeatureItem(player, "Enchanter", "Extra-Experience"));
         inv.setItem(6 + 9*4, CustomItemCollection.getFeatureItem(player, "Hunter", "Egg-Hunter"));
+        inv.setItem(inv.getSize()-1, CustomItemCollection.getSellInterfaceItem());
+
 
         player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Perk-Overview"));
         player.updateInventory();
@@ -68,7 +71,9 @@ public class MenuHandler {
 
             if (pdc.has(NamespacedKeyCollection.PerkShopKey)) {
                 updateMenuInventory(player, "Perk Shop", inventory);
-            } else {
+            } else if (pdc.has(NamespacedKeyCollection.SellKey)) {
+                updateMenuInventory(player, "Selling Items", inventory);
+            }else {
                 try {
                     NamespacedKey featureKey = pdc.getKeys().stream().findFirst().get();
                     boolean unlocked = Boolean.TRUE.equals(pdc.get(featureKey, PersistentDataType.BOOLEAN));
@@ -119,7 +124,7 @@ public class MenuHandler {
         inventory.setItem(5 + 9*2, PerkMenuCollection.getKeepExpItem(player));
         inventory.setItem(7 + 9*2, PerkMenuCollection.getFlightItem(player));
 
-        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Coin-Shop"));
+        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Coin Shop"));
         player.updateInventory();
     }
 
@@ -167,7 +172,7 @@ public class MenuHandler {
         inventory.setItem(3 + 9*2, PerkMenuCollection.getLootKeyShopItem());
         inventory.setItem(5 + 9*2, PerkMenuCollection.getFlightCreditShopItem());
 
-        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Gold-Shop"));
+        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Gold Shop"));
         player.updateInventory();
     }
 
@@ -187,6 +192,35 @@ public class MenuHandler {
             attemptPurchase(player, itemName);
             updateMenuInventory(player, "Gold Shop", inventory);
         }
+    }
+
+    /// SELL ITEMS MENU
+
+    public static void setSellInventory(Player player, Inventory inventory){
+        for(int i = 0; i < inventory.getSize(); i++){
+            inventory.setItem(i , new ItemStack(Material.AIR));
+        }
+        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Selling Items"));
+        player.updateInventory();
+    }
+
+    public static void processSellingInterfaceClosure(Player player, Inventory inventory){
+        Inventory playerInventory = player.getInventory();
+
+        for(ItemStack item : inventory.getContents()){
+            if(item != null) {
+                if (SaleMenuCollection.prices.containsKey(item.getType())) {
+                    UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) + SaleMenuCollection.prices.get(item.getType()));
+                } else {
+                    if (player.getInventory().firstEmpty() != -1) {
+                        playerInventory.addItem(item);
+                    } else {
+                        player.getLocation().getWorld().dropItemNaturally(player.getLocation(), item);
+                    }
+                }
+            }
+        }
+        ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
     }
 
     /// ALL SHOPS
@@ -212,6 +246,9 @@ public class MenuHandler {
 
         } else if(menu.equalsIgnoreCase("Perk Overview")){
             setPerkOverviewInventory(player, inventory);
+
+        } else if(menu.equalsIgnoreCase("Selling Items")){
+            setSellInventory(player, inventory);
         }
     }
 
@@ -227,6 +264,7 @@ public class MenuHandler {
                 else
                     player.getLocation().getWorld().dropItemNaturally(player.getLocation(), CustomItemCollection.createLootKey(1, "Normal"));
                 PlayerMessageHandler.sendPurchaseSuccessMessage(player, item.getItemMeta().getDisplayName());
+                ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
             }
 
             if (itemName.equalsIgnoreCase("Flight Credit")) {

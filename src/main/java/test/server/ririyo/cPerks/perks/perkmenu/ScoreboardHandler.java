@@ -6,7 +6,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class ScoreboardHandler {
+
+    public static HashMap<UUID, String> lastPerkUsed = new HashMap<>();
+
         ///USED TO UPDATE THE SCOREBOARD, A SMALL HUD ELEMENT THAT CAN DISPLAY TEXT.
     public static void updateScoreboard(Player player, String perk){
         ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -43,12 +50,13 @@ public class ScoreboardHandler {
         bottomLine.setScore(1);
 
         player.setScoreboard(board);
+        lastPerkUsed.put(player.getUniqueId(), perk);
     }
 
     public static int getPerkLevel(Player player, String perk){
         return Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), perk + ".Level"));
     }
-
+        ///NEEDS TO GO INTO THE FORMAT HANDLER LATER
     public static String getExperienceString(Player player, String perk){
         int exp = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), perk + ".Experience"));
         int levelUp = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), perk + ".Level-Up"));
@@ -71,10 +79,17 @@ public class ScoreboardHandler {
         else
             expStr = String.valueOf(exp);
 
-        if(levelUp >= 1000)
-            levelUpStr = levelUp/1000 + "." + levelUp%1000/10 + "k";
-        else
+        if(levelUp >= 1000) {
+            levelUpStr = String.valueOf(levelUp / 1000);
+            if (exp % 1000 / 10 < 10) {
+                ///ADDS A .0 BEFORE SINGLE DIGITS
+                levelUpStr = levelUpStr + ".0" + exp % 1000 / 10 + "k";
+            } else {
+                levelUpStr = levelUpStr + "." + exp % 1000 / 10 + "k";
+            }
+        } else {
             levelUpStr = String.valueOf(levelUp);
+        }
 
         return expStr + "/" + levelUpStr;
     }

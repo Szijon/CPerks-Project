@@ -74,9 +74,6 @@ public class PlayerLevelHandler {
         int level = getPlayerLevel(player, job);
         int exp = getPlayerExperience(player, job);
         int levelUp = getPlayerLevelUpExp(player, job);
-        if(job.equalsIgnoreCase("Farmer")){
-            levelUp /= 2;
-        }
 
         UserDataHandler.setPlayerCoins(player, UserDataHandler.getPlayerCoins(player)+10);
 
@@ -84,7 +81,12 @@ public class PlayerLevelHandler {
 
         setPlayerLevel(player, job, level);
         setPlayerExperience(player, job, exp - levelUp);
-        setPlayerLevelUpExp(player, job, AllPerksCollection.levelUps.get(level));
+
+        int neededLevelUpExp = AllPerksCollection.levelUps.get(level);
+        if(job.equalsIgnoreCase("Farmer")){
+             neededLevelUpExp /= 2;
+        }
+        setPlayerLevelUpExp(player, job, neededLevelUpExp);
 
         PlayerMessageHandler.sendLevelUpMessage(player, job, level);
 

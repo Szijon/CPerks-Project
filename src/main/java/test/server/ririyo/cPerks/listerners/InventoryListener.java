@@ -25,6 +25,8 @@ public class InventoryListener implements Listener {
 
             if (metadata.equalsIgnoreCase("Backpack")) {
                 UserDataHandler.set(player, player.getUniqueId(), "Backpack", inventory.getContents());
+            } else if (metadata.equalsIgnoreCase("Selling Items")){
+                MenuHandler.processSellingInterfaceClosure(player, inventory);
             }
             player.removeMetadata("Opened-Menu", CPerks.getInstance());
         }
@@ -43,25 +45,24 @@ public class InventoryListener implements Listener {
             Inventory inventory = event.getInventory();
             ItemStack clickedItem = inventory.getItem(event.getRawSlot());
 
-            ///CANCELS INTERACTION IF THE OPENED MENU IS NOT THE BACKPACK, BACKPACK IS THE ONLY MENU THEY ARE ALLOWED TO TAKE ITEMS OUT OF AND ITEMS TO.
-            if(!metadata.equalsIgnoreCase("Backpack")){
-                event.setCancelled(true);
-            }
-
             ///EXECUTES LOGIC DEPENDING ON THE SPECIFIC MENU THE PLAYER IS IN
             if (metadata.equalsIgnoreCase("Coin-Shop")) {
+                event.setCancelled(true);
                 if (clickedItem != null) {
                     MenuHandler.processCoinShopInteraction(player, inventory, clickedItem);
                 }
             } else if (metadata.equalsIgnoreCase("Perk-Shop")){
+                event.setCancelled(true);
                 if (clickedItem != null) {
                     MenuHandler.processPerkShopInteraction(player, inventory, clickedItem);
                 }
             } else if (metadata.equalsIgnoreCase("Gold-Shop")){
+                event.setCancelled(true);
                 if(clickedItem != null) {
                     MenuHandler.processGoldShopInteraction(player, inventory, clickedItem);
                 }
             } else if(metadata.equalsIgnoreCase("Perk-Overview")){
+                event.setCancelled(true);
                 if(clickedItem != null){
                     MenuHandler.processPerkOverviewInteraction(player, inventory, clickedItem);
                 }

@@ -164,6 +164,20 @@ public class CustomItemCollection {
                 false
         );
     }
+    public static ItemStack getSellInterfaceItem(){
+        return createCustomItem(
+                Material.GOLD_NUGGET,
+                1,
+                ChatColor.GOLD + "Sell Items",
+                List.of(" ", ChatColor.BLUE + "Put Items to sell in this Inventory", ChatColor.GREEN + "Close" + ChatColor.BLUE + " it to confirm Sale.", ChatColor.BLUE + "Unsellable Items will be returned to your Inventory."),
+                null,
+                null,
+                NamespacedKeyCollection.SellKey,
+                PersistentDataType.BOOLEAN,
+                true
+        );
+    }
+
         ///PERK SHOP SHOWS ITEM TO GET TO GOLD & COIN SHOP
     public static ItemStack getPerkShopItem(){
         return createCustomItem(

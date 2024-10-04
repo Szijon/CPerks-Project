@@ -38,6 +38,7 @@ public class LootPoolCollection {
             new WeightedDrop(new ItemStack(Material.DIAMOND, 8), 3000),
             new WeightedDrop(new ItemStack(Material.EMERALD, 8), 3000),
             new WeightedDrop(new ItemStack(Material.ENDER_PEARL, 8), 3000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(900), 3000),
 
             ///UNCOMMON ~29% Total Chance
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Normal"), 2000),
@@ -48,6 +49,7 @@ public class LootPoolCollection {
             new WeightedDrop(new ItemStack(Material.EXPERIENCE_BOTTLE, 16), 2000),
             new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 2), 2000),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.UNBREAKING, 3), false), 2000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 2000),
 
             ///RARE ~17% Total Chance
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Rare"), 1500),
@@ -56,13 +58,16 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), 1500),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 1500),
 
             ///VERY RARE ~13% Total Chance
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 500),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.COW), 500),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.PIG), 500),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SHEEP), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CHICKEN), 500)
+            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CHICKEN), 500),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 500)
+
     );
 
     public static List<WeightedDrop> rareLootPool = Arrays.asList(
@@ -74,12 +79,14 @@ public class LootPoolCollection {
             new WeightedDrop(new ItemStack(Material.EXPERIENCE_BOTTLE, 64), 3000),
             new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 4), 3000),
             new WeightedDrop(new ItemStack(Material.DIAMOND, 16), 3000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(900), 3000),
             new WeightedDrop(new ItemStack(Material.EMERALD, 16), 3000),
 
             ///UNCOMMON
             new WeightedDrop(new ItemStack(Material.ELYTRA, 1), 2000),
             new WeightedDrop(new ItemStack(Material.ENDER_CHEST, 1), 2000),
             new WeightedDrop(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1), 2000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 2000),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), 2000),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), 2000),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), 2000),
@@ -90,6 +97,7 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ELYTRA, 1, null, Map.of(Enchantment.UNBREAKING, 4, Enchantment.MENDING, 1), false), 1500),
             new WeightedDrop(new ItemStack(Material.NETHERITE_BLOCK, 1), 1500),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.RESPIRATION, 1), false), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 1500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 1500),
@@ -106,6 +114,7 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), 500),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), 500),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), 500),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 500),
 
             ///EXTRAORDINARILY RARE
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 250)
@@ -124,6 +133,7 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), 3000),
             new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 16), 3000),
             new WeightedDrop(new ItemStack(Material.BEACON, 1), 3000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 3000),
 
             ///UNCOMMON
             new WeightedDrop(CustomItemCollection.createLootKey(8, "Normal"), 2500),
@@ -140,6 +150,7 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_AXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
             new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HOE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 2500),
 
             ///RARE
                 ///MAX ENCHANTED ARMOR
@@ -157,6 +168,7 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), 1000),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), 1000),
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), 1000),
+            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 1000),
 
             ///VERY RARE
             new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 500),
@@ -165,15 +177,15 @@ public class LootPoolCollection {
             new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.WITHER_SKELETON), 500),
 
             ///EXTRAORDINARILY RARE
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
 
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.FEATHER_FALLING, 10, Enchantment.FROST_WALKER, 5, Enchantment.SOUL_SPEED, 5, Enchantment.DEPTH_STRIDER, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 500)
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.FEATHER_FALLING, 10, Enchantment.FROST_WALKER, 5, Enchantment.SOUL_SPEED, 5, Enchantment.DEPTH_STRIDER, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250)
             );
 
     public static List<WeightedDrop> gearLootPool = Arrays.asList(

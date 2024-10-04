@@ -45,12 +45,7 @@ Add Dropped Items from Perks to be sellable for Gold            ✖ - This will 
 Add Custom Enchants that are locked behind Enchanter Level      ✖ - Very in depth and complicated as the API I am using can not be used for this. Planned for much later.
 
 
-
 BUGS:
-✔ Vein-Miner Feature Item doesn't show Vein-Miner Cap same goes for Amounts or chances.
-✔ Farmer Exp needed is not cut in half. (Needs to be adjusted once Configs for this are in place.)
-✔ Spawner Names need underscores replaced with spaces and following character set to upper case (Also works for enchantment names now)
-✔ Enchantment Over level 10 is no longer in roman numbers, need to add enchantments to lore instead.
-✔ Enchantment Silk Touch causes Auto-Smelt to break
-✔ Rare Drop message will send "a" even if more than 1 item is dropped
-✔ Loot Crate Loot Selection will need to be changed to know if a low weight item was chosen for broadcasting messages.
+Exp is not being deducted properly upon silk touch mining a spawner.
+Move ScoreboardHandler format function to FormatHandler
+Move Custom Items in PerkMenuCollection to CustomItemCollection

@@ -15,6 +15,7 @@ public class NamespacedKeyCollection {
     ///PERK OVERVIEW
         ///BUTTON TO GET BACK
     public static NamespacedKey PerkOverviewKey = new NamespacedKey(CPerks.getInstance(), "Perk-Overview");
+    public static NamespacedKey SellKey = new NamespacedKey(CPerks.getInstance(), "Sell-Key");
 
         ///FEATURE UNLOCK KEYS
     public static NamespacedKey WoodcutterVeinMiner = new NamespacedKey(CPerks.getInstance(), "Woodcutter.Vein-Miner");
