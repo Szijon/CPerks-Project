@@ -68,6 +68,7 @@ public class FlightHandler {
         ///ADDS FLIGHT TIME UPON USING A FLIGHT CREDIT AND SENDS PLAYER A MESSAGE OF THE UPDATED FLIGHT TIME
     public static void addFlightTime(Player player, int amount){
         int initialTime = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Flight-Time"));
+
         if(player.getAllowFlight()){
             if(player.getGameMode() == GameMode.CREATIVE) {
                 UserDataHandler.set(player, player.getUniqueId(), "Player.Flight-Time", initialTime + amount);
@@ -75,12 +76,9 @@ public class FlightHandler {
                 return;
             }
             try {
-                activeTimers.get(player.getUniqueId()).cancel();
-                activeTimers.remove(player.getUniqueId());
-
+                int remainingTime = timeLeft.get(player.getUniqueId());
+                timeLeft.put(player.getUniqueId(), remainingTime + amount);
                 UserDataHandler.set(player, player.getUniqueId(), "Player.Flight-Time", initialTime + amount);
-
-                startFlightTimer(player);
             } catch (Exception ignored){}
         }
         else{
