@@ -6,6 +6,7 @@ C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\configs\DefaultUserConfig.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\configs\UserDataHandler.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\CPerks.java
+C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\enchantments\CustomEnchantments.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\handlers\PlayerLevelHandler.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\handlers\PlayerMessageHandler.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\listerners\BlockListener.java
@@ -18,6 +19,8 @@ C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\HologramHandler.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\LootCrateCommand.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\LootCrateHandler.java
+C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\LootCrateKeyItem.java
+C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\LootPool.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\lootcrate\LootPoolCollection.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\perks\AllPerksCollection.java
 C:\Users\Ririyo\MinecraftPlugins\CPerks\src\main\java\test\server\ririyo\cPerks\perks\features\ExpRefund.java

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import test.server.ririyo.cPerks.lootcrate.LootCrateKeyItem;
 import test.server.ririyo.cPerks.perks.AllPerksCollection;
 import test.server.ririyo.cPerks.collections.CustomItemCollection;
 import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
@@ -144,7 +145,7 @@ public class PerkMenuCollection {
     }
 
     public static ItemStack getLootKeyShopItem(){
-        ItemStack key = CustomItemCollection.createLootKey(1, "Normal");
+        ItemStack key = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL);
         ItemMeta meta = key.getItemMeta();
         if(meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();

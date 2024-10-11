@@ -4,6 +4,8 @@ import org.bukkit.Material;
 
 import org.bukkit.util.Vector;
 
+import java.util.Map;
+
 public class FarmerCollection {
 
         ///BLOCK POSITIONS TO CHECK FOR USING 3X3 HARVEST
@@ -61,4 +63,14 @@ public class FarmerCollection {
         Material.PUMPKIN,
         Material.MELON,
     };
+
+    public static Map<Material, Integer> expMulti = Map.ofEntries(
+            Map.entry(Material.WHEAT, 3),
+            Map.entry(Material.BEETROOT, 3),
+            Map.entry(Material.CARROT, 2),
+            Map.entry(Material.POTATO, 2),
+            Map.entry(Material.NETHER_WART, 2),
+            Map.entry(Material.PUMPKIN, 5),
+            Map.entry(Material.MELON, 5)
+    );
 }

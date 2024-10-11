@@ -41,6 +41,8 @@ public class WoodCutterCollection {
             Material.CHERRY_LOG,
             Material.MANGROVE_LOG,
             Material.ACACIA_LOG,
+            Material.WARPED_STEM,
+            Material.CRIMSON_STEM
     };
         ///TOOLS CONSIDERED TO BE WOODCUTTER TOOLS - NEEDED TO USE VEIN MINER
     public static final Material[] tools = {
@@ -51,4 +53,17 @@ public class WoodCutterCollection {
             Material.DIAMOND_AXE,
             Material.NETHERITE_AXE
     };
+
+    public static Map<Material, Integer> expMulti = Map.ofEntries(
+            Map.entry(Material.OAK_LOG, 2),
+            Map.entry(Material.BIRCH_LOG, 2),
+            Map.entry(Material.SPRUCE_LOG, 2),
+            Map.entry(Material.JUNGLE_LOG, 2),
+            Map.entry(Material.DARK_OAK_LOG, 2),
+            Map.entry(Material.CHERRY_LOG, 2),
+            Map.entry(Material.MANGROVE_LOG, 2),
+            Map.entry(Material.ACACIA_LOG, 2),
+            Map.entry(Material.CRIMSON_STEM, 3),
+            Map.entry(Material.WARPED_STEM, 3)
+    );
 }

@@ -16,6 +16,7 @@ import test.server.ririyo.cPerks.collections.CustomItemCollection;
 import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
 import test.server.ririyo.cPerks.handlers.PlayerMessageHandler;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
+import test.server.ririyo.cPerks.lootcrate.LootCrateKeyItem;
 
 
 public class MenuHandler {
@@ -262,11 +263,11 @@ public class MenuHandler {
         if (UserDataHandler.getPlayerGold(player) >= price) {
             ItemStack item;
             if (itemName.equalsIgnoreCase("Loot Key")) {
-                item = CustomItemCollection.createLootKey(1, "Normal");
+                item = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL);
                 if (player.getInventory().firstEmpty() != -1)
-                    player.getInventory().addItem(CustomItemCollection.createLootKey(1, "Normal"));
+                    player.getInventory().addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL));
                 else
-                    player.getLocation().getWorld().dropItemNaturally(player.getLocation(), CustomItemCollection.createLootKey(1, "Normal"));
+                    player.getLocation().getWorld().dropItemNaturally(player.getLocation(), LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL));
                 PlayerMessageHandler.sendPurchaseSuccessMessage(player, item.getItemMeta().getDisplayName());
 
             }

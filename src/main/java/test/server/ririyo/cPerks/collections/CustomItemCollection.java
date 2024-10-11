@@ -97,31 +97,6 @@ public class CustomItemCollection {
                 true
         );
     }
-            ///NEEDED ITEM TO OPEN A LOOT CRATE
-    public static ItemStack createLootKey(int amount, String type){
-        String displayName;
-        ///SET DISPLAY NAME OF ITEM DEPENDENT ON TYPE
-        if(type.equalsIgnoreCase("rare")) {
-            displayName = ChatColor.BLUE + type + " Loot Crate Key";
-        } else if(type.equalsIgnoreCase("legendary")) {
-            displayName = ChatColor.LIGHT_PURPLE + type + " Loot Crate Key";
-        } else if(type.equalsIgnoreCase("gear")) {
-            displayName = ChatColor.GOLD + type + " Loot Crate Key";
-        } else{
-            displayName = ChatColor.GREEN + type + " Loot Crate Key";
-        }
-        return createCustomItem(
-                Material.TRIPWIRE_HOOK,
-                amount,
-                displayName,
-                List.of("", ChatColor.GREEN + "Use at Spawn to Open Loot Crate!"),
-                Map.of(Enchantment.SHARPNESS, 1),
-                List.of(ItemFlag.HIDE_ENCHANTS),
-                NamespacedKeyCollection.LootCrateKeyKey,
-                PersistentDataType.STRING,
-                type
-        );
-    }
 
         ///LOOT
             ///UNABLE TO OBTAIN THROUGH NORMAL MEANS

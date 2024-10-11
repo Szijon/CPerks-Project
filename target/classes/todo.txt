@@ -36,14 +36,10 @@ ADD BETTER LOOT POOLS AND MORE KEYS                             ✔ - There were
 Allow player to sneak while opening a crate to open multiple    ✖
 
 Create A Server owner editable Config for Exp needed, prices,
-feature unlock levels and more.                                ✖
+feature unlock levels and more.                                 ✖
 Add Boosters: Perk Experience, Gold, Vanilla Experience         ✖ - Boosters that run for x time and give a 1.5x to 2x boost to a specified gain.
 Add Vanilla Enchants OverLevel                                  ✖
 Add Dropped Items from Perks to be sellable for Gold            ✖ - This will also be found in the editable config
 
 
 Add Custom Enchants that are locked behind Enchanter Level      ✖ - Very in depth and complicated as the API I am using can not be used for this. Planned for much later.
-
-
-BUGS:
-Adding Flight time during active Flight doesn't work.

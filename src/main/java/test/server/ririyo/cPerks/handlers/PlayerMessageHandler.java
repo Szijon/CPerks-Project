@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import test.server.ririyo.cPerks.lootcrate.LootPool;
 import test.server.ririyo.cPerks.lootcrate.LootPoolCollection;
 import test.server.ririyo.cPerks.perks.perkmenu.MenuCollection;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
@@ -78,16 +79,15 @@ public class PlayerMessageHandler {
         player.sendMessage(BLUE + "Flight Time: " + GREEN + time[0] +"d " + time[1] + "h " + time[2] + "m " + time[3] + "s");
     }
         ///BROADCASTS AN ITEM DROP TO EVERY PLAYER ON THE SERVER AND PLAYS SOUND IF IT'S CONSIDERED VERY RARE
-    public static void broadcastRareDrop(Player player, LootPoolCollection.WeightedDrop drop, String origin){
-        if(drop.weight() <= 500){
-            if(drop.weight() <= 250){
-                Bukkit.broadcastMessage(ChatColor.DARK_PURPLE + "SUPER RARE!!! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + drop.item().getAmount() + " " + drop.item().getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin + ChatColor.BLUE + "!");
-                for(Player p : Bukkit.getOnlinePlayers()){
-                    p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.25f, 1);
-                }
-            } else {
-                Bukkit.broadcastMessage(ChatColor.AQUA + "RARE! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + drop.item().getAmount() + " " + drop.item().getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin + ChatColor.BLUE + "!");
+    public static void broadcastRareDrop(Player player, LootPool.Drop drop, LootPool.Pool origin){
+        if(drop.getRarity() == LootPool.Rarity.MYTHIC){
+            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + "MYTHIC!! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + drop.getItem().getAmount() + " " + drop.getItem().getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin.getName() + ChatColor.BLUE + "!");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.25f, 1);
             }
+        } else if(drop.getRarity() == LootPool.Rarity.LEGENDARY){
+            Bukkit.broadcastMessage(ChatColor.GOLD + "LEGENDARY! " + ChatColor.GREEN + player.getName() + ChatColor.BLUE + " has obtained " + ChatColor.LIGHT_PURPLE + drop.getItem().getAmount() + " " + drop.getItem().getItemMeta().getDisplayName() + ChatColor.BLUE + " from " + ChatColor.RED + origin.getName() + ChatColor.BLUE + "!");
         }
     }
 }
+

@@ -32,16 +32,20 @@ public class WoodCutter {
                 blockToBreak.breakNaturally(tool);
                 ///REPLANTS A MATCHING SAPLING IF THE BLOCK BELOW THE MINED ONE IS GRASS OR DIRT
                 if(replant && WoodCutterCollection.saplingMatch.containsKey(woodType)){
-                    if (blockToBreak.getWorld().getBlockAt(blockToBreak.getLocation().add(new Vector(0, -1, 0))).getType() == Material.DIRT || blockToBreak.getWorld().getBlockAt(blockToBreak.getLocation().add(new Vector(0, -1, 0))).getType() == Material.GRASS_BLOCK) {
+                    Material blockBelow = blockToBreak.getWorld().getBlockAt(blockToBreak.getLocation().add(new Vector(0, -1, 0))).getType();
+                    if (blockBelow == Material.DIRT || blockBelow == Material.GRASS_BLOCK || blockBelow == Material.PODZOL) {
                         /// BLOCK BELOW IS DIRT OR GRASS
                         blockToBreak.setType(WoodCutterCollection.saplingMatch.get(woodType));
-
                     }
                 }
                 ExtraExperience.spawnExtraExp(player, blockToBreak.getLocation());
             }
             brokenBlocks = toBreak.size();
-            return brokenBlocks;
+            if(WoodCutterCollection.expMulti.containsKey(block.getType())){
+                return brokenBlocks * WoodCutterCollection.expMulti.get(block.getType());
+            } else {
+                return brokenBlocks;
+            }
             ///BREAKS BLOCK NORMALLY IF PLAYER DOESN'T HAVE VEIN MINER UNLOCKED
         } else {
             block.breakNaturally();
@@ -54,7 +58,11 @@ public class WoodCutter {
                 }
             }
         }
-        return 1;
+        if(WoodCutterCollection.expMulti.containsKey(block.getType())){
+            return WoodCutterCollection.expMulti.get(block.getType());
+        } else {
+            return 1;
+        }
     }
         ///RETURNS SET OF CONNECTED BLOCKS ACCORDING TO VEIN MINER BLOCK CAP
     public static Set<Block> getBlocksToBreak(Block block, int maximumBlocks) {

@@ -40,12 +40,22 @@ public class Farmer {
                 ///CHECKS IF REPLANTING IS ENABLED AND REPLANTS THE BLOCK IF IT IS REPLANT-ABLE
                 if(replanting && Arrays.asList(FarmerCollection.replants).contains(blockType)) {
                     if(replant(player, blockToBreak, blockType, blockDrop)) {
-                        exp++;
+                        for (ItemStack drop : blockDrop){
+                            if (FarmerCollection.expMulti.containsKey(drop.getType())){
+                                exp += FarmerCollection.expMulti.get(drop.getType());
+                                break;
+                            }
+                        }
                     }
                     ///BREAKS BLOCK NORMALLY
                 } else {
                     if (mineBlock(player, blockToBreak, blockDrop)){
-                        exp++;
+                        for (ItemStack drop : blockDrop){
+                            if (FarmerCollection.expMulti.containsKey(drop.getType())){
+                                exp += FarmerCollection.expMulti.get(drop.getType());
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -61,7 +71,13 @@ public class Farmer {
             } else {
                 mineBlock(player, block, blockDrop);
             }
-            return 1;
+            for (ItemStack drop : blockDrop){
+                if (FarmerCollection.expMulti.containsKey(drop.getType())){
+                    exp += FarmerCollection.expMulti.get(drop.getType());
+                    break;
+                }
+            }
+            return exp;
         }
     }
 

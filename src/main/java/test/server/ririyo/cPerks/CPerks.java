@@ -3,6 +3,8 @@ package test.server.ririyo.cPerks;
 import org.bukkit.plugin.java.JavaPlugin;
 import test.server.ririyo.cPerks.listerners.*;
 import test.server.ririyo.cPerks.lootcrate.LootCrateCommand;
+import test.server.ririyo.cPerks.lootcrate.LootPool;
+import test.server.ririyo.cPerks.lootcrate.LootPoolCollection;
 import test.server.ririyo.cPerks.perks.features.FlightCommand;
 import test.server.ririyo.cPerks.perks.perkmenu.BackpackCommand;
 import test.server.ririyo.cPerks.perks.perkmenu.PerksCommand;

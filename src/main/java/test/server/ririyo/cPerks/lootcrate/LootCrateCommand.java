@@ -48,16 +48,16 @@ public class LootCrateCommand implements CommandExecutor, TabCompleter {
                                 LootCrateHandler.giveLootCrateBlock(target, amount);
                                 break;
                             case "key:normal":
-                                LootCrateHandler.giveLootCrateKey(target, amount, "Normal");
+                                LootCrateHandler.giveLootCrateKey(target, amount, LootCrateKeyItem.LootKeyType.NORMAL);
                                 break;
                             case "key:rare":
-                                LootCrateHandler.giveLootCrateKey(target, amount, "Rare");
+                                LootCrateHandler.giveLootCrateKey(target, amount, LootCrateKeyItem.LootKeyType.RARE);
                                 break;
                             case "key:legendary":
-                                LootCrateHandler.giveLootCrateKey(target, amount, "Legendary");
+                                LootCrateHandler.giveLootCrateKey(target, amount, LootCrateKeyItem.LootKeyType.LEGENDARY);
                                 break;
-                            case "key:gear":
-                                LootCrateHandler.giveLootCrateKey(target, amount, "Gear");
+                            case "key:mythic":
+                                LootCrateHandler.giveLootCrateKey(target, amount, LootCrateKeyItem.LootKeyType.MYTHIC);
                                 break;
                         }
                         break;
@@ -79,7 +79,7 @@ public class LootCrateCommand implements CommandExecutor, TabCompleter {
             arguments.add("key:normal");
             arguments.add("key:rare");
             arguments.add("key:legendary");
-            arguments.add("key:gear");
+            arguments.add("key:mythic");
         }
 
         if (sender instanceof Player player) {

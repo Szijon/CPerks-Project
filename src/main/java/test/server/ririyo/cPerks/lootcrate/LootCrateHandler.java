@@ -21,7 +21,7 @@ import java.util.*;
 public class LootCrateHandler {
 
     public static class LimitedQueue<T> {
-        private final Queue<LootPoolCollection.WeightedDrop> queue;
+        private final Queue<LootPool.Drop> queue;
         private final int maxSize;
 
         public LimitedQueue(int size){
@@ -29,14 +29,14 @@ public class LootCrateHandler {
             this.maxSize = size;
         }
 
-        public void add(LootPoolCollection.WeightedDrop drop){
+        public void add(LootPool.Drop drop){
             if(queue.size() >= maxSize){
                 queue.poll();
             }
             queue.offer(drop);
         }
 
-        public LootPoolCollection.WeightedDrop get(){
+        public LootPool.Drop get(){
             return queue.peek();
         }
     }
@@ -46,23 +46,19 @@ public class LootCrateHandler {
         player.getInventory().addItem(CustomItemCollection.getLootCrateBlock(amount));
     }
     ///GIVES SPECIFIED PLAYER A LOOT CRATE KEY WITH SPECIFIED AMOUNT AND TYPE
-    public static void giveLootCrateKey(Player player, int amount, String type){
-        player.getInventory().addItem(CustomItemCollection.createLootKey(amount, type));
+    public static void giveLootCrateKey(Player player, int amount, LootCrateKeyItem.LootKeyType type){
+        player.getInventory().addItem(LootCrateKeyItem.get(amount, type));
     }
 
     ///GETS A RANDOM ITEM FROM A SPECIFIED LOOT POOL
-    public static LootPoolCollection.WeightedDrop getRandomDrop(List<LootPoolCollection.WeightedDrop> dropPool){
-        int totalWeight = 0;
-        for(LootPoolCollection.WeightedDrop drop : dropPool){
-            totalWeight += drop.weight();
-        }
-
+    public static LootPool.Drop getRandomDrop(LootPool.Pool pool){
+        int totalWeight = pool.getTotalWeight();
         Random random = new Random();
         int dropIndex = random.nextInt(totalWeight);
 
         int cumulativeWeight = 0;
-        for(LootPoolCollection.WeightedDrop drop : dropPool){
-            cumulativeWeight += drop.weight();
+        for(LootPool.Drop drop : pool.getDropList()){
+            cumulativeWeight += drop.getWeight();
             if(dropIndex < cumulativeWeight) {
                 return drop;
             }
@@ -72,30 +68,30 @@ public class LootCrateHandler {
     }
 
         ///MATCHES A LOOT POOL TO A TYPE OF KEY
-    public static List<LootPoolCollection.WeightedDrop> getPool(String type){
+    public static LootPool.Pool getPool(String type){
         if(type.equalsIgnoreCase("Rare")){
-            return LootPoolCollection.rareLootPool;
+            return LootPoolCollection.rareLootCratePool;
         } else if(type.equalsIgnoreCase("Legendary")){
-            return LootPoolCollection.legendaryLootPool;
-        } else if(type.equalsIgnoreCase("Gear")){
-            return LootPoolCollection.gearLootPool;
+            return LootPoolCollection.legendaryLootCratePool;
+        } else if(type.equalsIgnoreCase("Mythic")){
+            return LootPoolCollection.mythicLootCratePool;
         } else {
-            return LootPoolCollection.normalLootPool;
+            return LootPoolCollection.normalLootCratePool;
         }
     }
 
     public static void openCratesInstantly(Player player, String type, int amount){
-        List<LootPoolCollection.WeightedDrop> pool = getPool(type);
+        LootPool.Pool pool = getPool(type);
 
         for (int i = 0; i < amount; i++) {
-            LootPoolCollection.WeightedDrop loot = getRandomDrop(pool);
+            LootPool.Drop loot = getRandomDrop(pool);
             if (player.getInventory().firstEmpty() != -1) {
-                player.getInventory().addItem(loot.item());
+                player.getInventory().addItem(loot.getItem());
             } else {
-                player.getWorld().dropItemNaturally(player.getLocation(), loot.item());
+                player.getWorld().dropItemNaturally(player.getLocation(), loot.getItem());
             }
-            String origin = type + " Crate";
-            PlayerMessageHandler.broadcastRareDrop(player, loot, origin);
+            PlayerMessageHandler.broadcastRareDrop(player, loot, pool);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1);
         }
     }
 
@@ -103,7 +99,7 @@ public class LootCrateHandler {
     public static void openLootBoxGUI(Player player, String type) {
         Inventory lootBoxInv = Bukkit.createInventory(null, 27,  ChatColor.GOLD + type + " Loot Box");
 
-        List<LootPoolCollection.WeightedDrop> pool = getPool(type);
+        LootPool.Pool pool = getPool(type);
         LimitedQueue queue = new LimitedQueue(5);
 
         /// SETS SURROUNDING SLOTS TO RED PANES FOR AESTHETICS
@@ -116,8 +112,8 @@ public class LootCrateHandler {
 
         ///SETS CENTER ROW TO BE RANDOM SELECTED ITEMS FROM LOOT POOL
         for (int i = 9; i < 18; i++) {
-            LootPoolCollection.WeightedDrop drop = getRandomDrop(pool);
-            lootBoxInv.setItem(i, drop.item());
+            LootPool.Drop drop = getRandomDrop(pool);
+            lootBoxInv.setItem(i, drop.getItem());
             if(i > 13){
                 queue.add(drop);
             }
@@ -125,13 +121,13 @@ public class LootCrateHandler {
         ///FINALLY OPENS THE INVENTORY FOR THE PLAYER TO WATCH THE SELECTION
         player.openInventory(lootBoxInv);
         player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Loot-Crate"));
-        rotateLootItems(player, lootBoxInv, pool, 0, 1, queue, type);
+        rotateLootItems(player, lootBoxInv, pool, 0, 1, queue);
     }
 
         ///ROTATES THE ITEMS AS TO IMITATE AN ANIMATION OF THE ITEM BEING SELECTED.
-    private static void rotateLootItems(Player player, Inventory lootBoxInventory, List<LootPoolCollection.WeightedDrop> pool, int cycle, int delay, LimitedQueue queue, String crateType) {
+    private static void rotateLootItems(Player player, Inventory lootBoxInventory, LootPool.Pool pool, int cycle, int delay, LimitedQueue queue) {
         if (cycle >= 70) {
-            giveFinalLoot(player, queue, crateType);
+            giveFinalLoot(player, queue, pool);
             return;
         }
 
@@ -140,8 +136,8 @@ public class LootCrateHandler {
         }
 
         /// Add new Random item to the right hand side.
-        LootPoolCollection.WeightedDrop drop = getRandomDrop(pool);
-        lootBoxInventory.setItem(17, drop.item());
+        LootPool.Drop drop = getRandomDrop(pool);
+        lootBoxInventory.setItem(17, drop.getItem());
         queue.add(drop);
 
         player.updateInventory();
@@ -150,14 +146,14 @@ public class LootCrateHandler {
         new BukkitRunnable() {
             @Override
             public void run() {
-                rotateLootItems(player, lootBoxInventory, pool, cycle + 1, calculateNewDelay(cycle, delay), queue, crateType);
+                rotateLootItems(player, lootBoxInventory, pool, cycle + 1, calculateNewDelay(cycle, delay), queue);
             }
         }.runTaskLater(CPerks.getInstance(), delay);
     }
     ///GIVES THE PLAYER THE ITEM AT THE CENTER OF THE INTERFACE
-    private static void giveFinalLoot(Player player, LimitedQueue queue, String crateType) {
-        ItemStack finalLoot = queue.get().item();
-        PlayerMessageHandler.broadcastRareDrop(player, queue.get(),  crateType + " Crate");
+    private static void giveFinalLoot(Player player, LimitedQueue queue, LootPool.Pool pool ) {
+        ItemStack finalLoot = queue.get().getItem();
+        PlayerMessageHandler.broadcastRareDrop(player, queue.get(),  pool);
         if (finalLoot != null) {
             if(player.getInventory().firstEmpty() != -1) {
                 player.getInventory().addItem(finalLoot);
@@ -222,14 +218,12 @@ public class LootCrateHandler {
     }
         ///USED WHEN A PLAYER TRIGGERS THE 0.033% OF DROPPING A KEY TO GIVE THEM A RANDOM KEY FROM A LOOT POOL
     public static void getRandomLootKeyDrop(Player player){
-        LootPoolCollection.WeightedDrop key = getRandomDrop(LootPoolCollection.keyLootPool);
-        ItemStack keyItem = key.item();
+        LootPool.Drop key = getRandomDrop(LootPoolCollection.keyPool);
+        ItemStack keyItem = key.getItem();
         ItemMeta meta = keyItem.getItemMeta();
-        PersistentDataContainer pdc = meta.getPersistentDataContainer();
         Objects.requireNonNull(player.getLocation().getWorld()).dropItemNaturally(player.getLocation(), keyItem);
-        String origin = "Perk Drop";
 
-        PlayerMessageHandler.broadcastRareDrop(player, key, origin);
+        PlayerMessageHandler.broadcastRareDrop(player, key, LootPoolCollection.keyPool);
 
         ///SEND MESSAGE TO PLAYER TO NOTIFY THEM.
         PlayerMessageHandler.sendRareDropMessage(player, meta.getDisplayName(), keyItem.getAmount());

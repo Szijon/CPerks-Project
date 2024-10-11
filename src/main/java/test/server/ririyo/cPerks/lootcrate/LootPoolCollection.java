@@ -7,200 +7,218 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import test.server.ririyo.cPerks.collections.CustomItemCollection;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class LootPoolCollection {
 
-    public record WeightedDrop(ItemStack item, int weight) {}
-    
-        ///WEIGHTED LOOT POOLS TO NOT MAKE EVERY ITEM THE SAME CHANCE TO DROP
-    public static List<WeightedDrop> keyLootPool = Arrays.asList(
-            ///USED FOR GETTING A RANDOM KEY ON TRIGGERING 0.01% DROP CHANCE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Normal"), 4000),
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Rare"), 3000),
-            new WeightedDrop(CustomItemCollection.createLootKey(5, "Normal"), 2500),
-            new WeightedDrop(CustomItemCollection.createLootKey(5, "Rare"), 1000),
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 500),
-            ///OVERALL CHANCE TO DROP: 0.00125%
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 250)
-    );
+    public static LootPool.Pool keyPool = initializeKeyPool();
+    public static LootPool.Pool normalLootCratePool = initializeNormalLootCratePool();
+    public static LootPool.Pool rareLootCratePool = initializeRareLootCratePool();
+    public static LootPool.Pool legendaryLootCratePool = initializeLegendaryLootCratePool();
+    public static LootPool.Pool mythicLootCratePool = initializeMythicLootCratePool();
 
-    public static List<WeightedDrop> normalLootPool = Arrays.asList(
-            ///COMMON ~39% Total Chance
-            new WeightedDrop(new ItemStack(Material.GOLDEN_CARROT, 16), 3000),
-            new WeightedDrop(new ItemStack(Material.OAK_LOG, 64), 3000),
-            new WeightedDrop(new ItemStack(Material.TOTEM_OF_UNDYING, 1), 3000),
-            new WeightedDrop(new ItemStack(Material.GOLDEN_APPLE, 8), 3000),
-            new WeightedDrop(new ItemStack(Material.IRON_ORE, 16), 3000),
-            new WeightedDrop(new ItemStack(Material.GOLD_ORE, 16), 3000),
-            new WeightedDrop(new ItemStack(Material.DIAMOND, 8), 3000),
-            new WeightedDrop(new ItemStack(Material.EMERALD, 8), 3000),
-            new WeightedDrop(new ItemStack(Material.ENDER_PEARL, 8), 3000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(900), 3000),
+    public static LootPool.Pool initializeKeyPool() {
+        LootPool.Pool pool = new LootPool.Pool("Key Drop");
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL), LootPool.Rarity.COMMON);
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.RARE), LootPool.Rarity.RARE);
+        pool.addItem(LootCrateKeyItem.get(5, LootCrateKeyItem.LootKeyType.NORMAL), LootPool.Rarity.EPIC);
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.EPIC);
+        pool.addItem(LootCrateKeyItem.get(5, LootCrateKeyItem.LootKeyType.RARE), LootPool.Rarity.EPIC);
+        pool.addItem(LootCrateKeyItem.get(5, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.MYTHIC);
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.MYTHIC), LootPool.Rarity.MYTHIC);
 
-            ///UNCOMMON ~29% Total Chance
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Normal"), 2000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_INGOT, 1), 2000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_SCRAP, 4), 2000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1), 2000),
-            new WeightedDrop(new ItemStack(Material.ELYTRA, 1), 2000),
-            new WeightedDrop(new ItemStack(Material.EXPERIENCE_BOTTLE, 16), 2000),
-            new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 2), 2000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.UNBREAKING, 3), false), 2000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 2000),
+        pool.calculateWeight();
+        return pool;
+    }
 
-            ///RARE ~17% Total Chance
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Rare"), 1500),
-            new WeightedDrop(new ItemStack(Material.ENDER_CHEST, 1), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), 1500),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 1500),
+    public static LootPool.Pool initializeNormalLootCratePool(){
+        LootPool.Pool pool = new LootPool.Pool(ChatColor.GREEN + "Normal Loot Crate");
 
-            ///VERY RARE ~13% Total Chance
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.COW), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.PIG), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SHEEP), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CHICKEN), 500),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 500)
+        ///COMMON
+        pool.addItem(new ItemStack(Material.GOLDEN_CARROT, 16), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.OAK_LOG, 64), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.TOTEM_OF_UNDYING, 1), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.GOLDEN_APPLE, 8), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.RAW_IRON, 16), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.RAW_GOLD, 16), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.DIAMOND, 8), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.EMERALD, 8), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.ENDER_PEARL, 8), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.getFlightCredit(900), LootPool.Rarity.COMMON);
 
-    );
+        ///RARE
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.NETHERITE_INGOT, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.NETHERITE_SCRAP, 4), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.ELYTRA, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.EXPERIENCE_BOTTLE, 16), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.SHULKER_SHELL, 2), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.UNBREAKING, 3), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.getFlightCredit(1800), LootPool.Rarity.RARE);
 
-    public static List<WeightedDrop> rareLootPool = Arrays.asList(
-            ///COMMON
-            new WeightedDrop(new ItemStack(Material.GOLDEN_APPLE, 8), 3000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_INGOT, 1), 3000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_SCRAP, 4), 3000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1), 3000),
-            new WeightedDrop(new ItemStack(Material.EXPERIENCE_BOTTLE, 64), 3000),
-            new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 4), 3000),
-            new WeightedDrop(new ItemStack(Material.DIAMOND, 16), 3000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(900), 3000),
-            new WeightedDrop(new ItemStack(Material.EMERALD, 16), 3000),
+        ///EPIC
+        pool.addItem(new ItemStack(Material.BEACON, 1), LootPool.Rarity.EPIC);
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.RARE), LootPool.Rarity.EPIC);
+        pool.addItem(new ItemStack(Material.ENDER_CHEST, 1), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.getFlightCredit(2700), LootPool.Rarity.EPIC);
 
-            ///UNCOMMON
-            new WeightedDrop(new ItemStack(Material.ELYTRA, 1), 2000),
-            new WeightedDrop(new ItemStack(Material.ENDER_CHEST, 1), 2000),
-            new WeightedDrop(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1), 2000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 2000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), 2000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), 2000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), 2000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), 2000),
-            new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 16), 2000),
+        ///LEGENDARY
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.COW), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.PIG), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.SHEEP), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.CHICKEN), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.getFlightCredit(3600), LootPool.Rarity.LEGENDARY);
 
-            ///RARE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ELYTRA, 1, null, Map.of(Enchantment.UNBREAKING, 4, Enchantment.MENDING, 1), false), 1500),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_BLOCK, 1), 1500),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.RESPIRATION, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.SOUL_SPEED, 1, Enchantment.DEPTH_STRIDER, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SWORD, 1, null, Map.of(Enchantment.SHARPNESS, 2, Enchantment.UNBREAKING, 1, Enchantment.SWEEPING_EDGE, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_AXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HOE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 1500),
+        pool.calculateWeight();
+        return pool;
+    }
 
-            ///VERY RARE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.ZOMBIE), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), 500),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 500),
+    public static LootPool.Pool initializeRareLootCratePool(){
+        LootPool.Pool pool = new LootPool.Pool(ChatColor.BLUE + "Rare Loot Crate");
 
-            ///EXTRAORDINARILY RARE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 250)
-    );
+        ///COMMON
+        pool.addItem(new ItemStack(Material.GOLDEN_APPLE, 8), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.NETHERITE_INGOT, 1), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.NETHERITE_SCRAP, 4), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 1), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.EXPERIENCE_BOTTLE, 64), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.SHULKER_SHELL, 4), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.DIAMOND, 16), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.EMERALD, 16), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.getFlightCredit(1200), LootPool.Rarity.COMMON);
 
-    public static List<WeightedDrop> legendaryLootPool = Arrays.asList(
-            ///COMMON
-            new WeightedDrop(new ItemStack(Material.NETHERITE_INGOT, 2), 3000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_SCRAP, 8), 3000),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 2), 3000),
-            new WeightedDrop(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 4), 3000),
-            new WeightedDrop(new ItemStack(Material.ENDER_CHEST, 2), 3000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), 3000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), 3000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), 3000),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), 3000),
-            new WeightedDrop(new ItemStack(Material.SHULKER_SHELL, 16), 3000),
-            new WeightedDrop(new ItemStack(Material.BEACON, 1), 3000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(1800), 3000),
+        ///RARE
+        pool.addItem(new ItemStack(Material.BEACON, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.ELYTRA, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.ENDER_CHEST, 1), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.getFlightCredit(1800), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.SHULKER_SHELL, 16), LootPool.Rarity.RARE);
 
-            ///UNCOMMON
-            new WeightedDrop(CustomItemCollection.createLootKey(8, "Normal"), 2500),
-            new WeightedDrop(CustomItemCollection.createLootKey(3, "Rare"), 2500),
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Legendary"), 2500), ///RETRY KEY
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.ELYTRA, 1, null, Map.of(Enchantment.UNBREAKING, 4, Enchantment.MENDING, 1), false), 2500),
-            new WeightedDrop(new ItemStack(Material.NETHERITE_BLOCK, 1), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.RESPIRATION, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.SOUL_SPEED, 1, Enchantment.DEPTH_STRIDER, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SWORD, 1, null, Map.of(Enchantment.SHARPNESS, 2, Enchantment.UNBREAKING, 1, Enchantment.SWEEPING_EDGE, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_AXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HOE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), 2500),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(3600), 2500),
+        ///EPIC
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ELYTRA, 1, null, Map.of(Enchantment.UNBREAKING, 4, Enchantment.MENDING, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(new ItemStack(Material.NETHERITE_BLOCK, 1), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.getFlightCredit(2700), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.RESPIRATION, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.SOUL_SPEED, 1, Enchantment.DEPTH_STRIDER, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SWORD, 1, null, Map.of(Enchantment.SHARPNESS, 2, Enchantment.UNBREAKING, 1, Enchantment.SWEEPING_EDGE, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_AXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HOE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.EPIC);
 
-            ///RARE
-                ///MAX ENCHANTED ARMOR
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.AQUA_AFFINITY, 1, Enchantment.RESPIRATION, 1, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.SWIFT_SNEAK, 3, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.FROST_WALKER, 2, Enchantment.FEATHER_FALLING, 4, Enchantment.SOUL_SPEED, 3, Enchantment.DEPTH_STRIDER, 3, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), 1500),
-                ///MAX ENCHANTED TOOLS
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, null, Map.of(Enchantment.EFFICIENCY , 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), 1500),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), 1500),
+        ///LEGENDARY
+        pool.addItem(LootCrateKeyItem.get(2, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.ZOMBIE), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.getFlightCredit(3600), LootPool.Rarity.LEGENDARY);
 
-            ///SPAWNERS FROM LOWER KEY POOL
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.ZOMBIE), 1000),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), 1000),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), 1000),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), 1000),
-            new WeightedDrop(CustomItemCollection.getFlightCredit(36000), 1000),
+        ///MYTHIC 0.5%
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.MYTHIC), LootPool.Rarity.MYTHIC);
 
-            ///VERY RARE
-            new WeightedDrop(CustomItemCollection.createLootKey(1, "Gear"), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.IRON_GOLEM), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.WARDEN), 500),
-            new WeightedDrop(CustomItemCollection.createMonsterSpawner(EntityType.WITHER_SKELETON), 500),
+        pool.calculateWeight();
+        return pool;
+    }
 
-            ///EXTRAORDINARILY RARE
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
+    public static LootPool.Pool initializeLegendaryLootCratePool(){
+        LootPool.Pool pool = new LootPool.Pool(ChatColor.GOLD + "Legendary Loot Crate");
 
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.FEATHER_FALLING, 10, Enchantment.FROST_WALKER, 5, Enchantment.SOUL_SPEED, 5, Enchantment.DEPTH_STRIDER, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 250)
-            );
+        ///COMMON
+        pool.addItem(new ItemStack(Material.NETHERITE_INGOT, 2), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.NETHERITE_SCRAP, 8), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE, 2), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 4), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.ENDER_CHEST, 2), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.SHARPNESS, 5), false), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.FORTUNE, 3), false), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.MENDING, 1), false), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ENCHANTED_BOOK, 1, null, Map.of(Enchantment.EFFICIENCY, 5), false), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.SHULKER_SHELL, 16), LootPool.Rarity.COMMON);
+        pool.addItem(new ItemStack(Material.BEACON, 1), LootPool.Rarity.COMMON);
+        pool.addItem(CustomItemCollection.getFlightCredit(1800), LootPool.Rarity.COMMON);
 
-    public static List<WeightedDrop> gearLootPool = Arrays.asList(
-            ///ALL ITEMS HAVE EQUAL DROP CHANCE
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
+        ///RARE
+        pool.addItem(LootCrateKeyItem.get(8, LootCrateKeyItem.LootKeyType.NORMAL), LootPool.Rarity.RARE);
+        pool.addItem(LootCrateKeyItem.get(4, LootCrateKeyItem.LootKeyType.RARE), LootPool.Rarity.RARE);
+        pool.addItem(LootCrateKeyItem.get(2, LootCrateKeyItem.LootKeyType.LEGENDARY), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.ELYTRA, 1, null, Map.of(Enchantment.UNBREAKING, 4, Enchantment.MENDING, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(new ItemStack(Material.NETHERITE_BLOCK, 1), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.RESPIRATION, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.THORNS, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 2, Enchantment.UNBREAKING, 1, Enchantment.SOUL_SPEED, 1, Enchantment.DEPTH_STRIDER, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SWORD, 1, null, Map.of(Enchantment.SHARPNESS, 2, Enchantment.UNBREAKING, 1, Enchantment.SWEEPING_EDGE, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_AXE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.DIAMOND_HOE, 1, null, Map.of(Enchantment.EFFICIENCY, 2, Enchantment.UNBREAKING, 1, Enchantment.FORTUNE, 1), false), LootPool.Rarity.RARE);
+        pool.addItem(CustomItemCollection.getFlightCredit(3600), LootPool.Rarity.RARE);
 
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SHOVEL, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP SHOVEL", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HOE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HOE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
+        ///EPIC
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.AQUA_AFFINITY, 1, Enchantment.RESPIRATION, 1, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_LEGGINGS, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.SWIFT_SNEAK, 3, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, null, Map.of(Enchantment.PROTECTION, 4, Enchantment.FROST_WALKER, 2, Enchantment.FEATHER_FALLING, 4, Enchantment.SOUL_SPEED, 3, Enchantment.DEPTH_STRIDER, 3, Enchantment.THORNS, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, null, Map.of(Enchantment.EFFICIENCY, 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, null, Map.of(Enchantment.EFFICIENCY , 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SHOVEL, 1, null, Map.of(Enchantment.EFFICIENCY, 5, Enchantment.FORTUNE, 3, Enchantment.UNBREAKING, 3), false), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.ZOMBIE), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.CREEPER), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.SKELETON), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.SPIDER), LootPool.Rarity.EPIC);
+        pool.addItem(CustomItemCollection.getFlightCredit(7200), LootPool.Rarity.EPIC);
 
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10),
-            new WeightedDrop(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "OP HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), 10)
-    );
+        ///LEGENDARY
+        pool.addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.MYTHIC), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.IRON_GOLEM), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.WARDEN), LootPool.Rarity.LEGENDARY);
+        pool.addItem(CustomItemCollection.createMonsterSpawner(EntityType.WITHER_SKELETON), LootPool.Rarity.LEGENDARY);
+
+        ///MYTHIC
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_LEGGINGS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 LEGGINGS", Map.of(Enchantment.PROTECTION, 25, Enchantment.SWIFT_SNEAK, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 BOOTS", Map.of(Enchantment.PROTECTION, 25, Enchantment.FEATHER_FALLING, 10, Enchantment.FROST_WALKER, 5, Enchantment.SOUL_SPEED, 5, Enchantment.DEPTH_STRIDER, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(LootCrateKeyItem.get(2, LootCrateKeyItem.LootKeyType.MYTHIC), LootPool.Rarity.MYTHIC);
+
+        pool.calculateWeight();
+        return pool;
+    }
+
+    public static LootPool.Pool initializeMythicLootCratePool(){
+        LootPool.Pool pool = new LootPool.Pool(ChatColor.LIGHT_PURPLE + "Mythic Loot Crate");
+
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SWORD, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 SWORD", Map.of(Enchantment.SHARPNESS, 25, Enchantment.KNOCKBACK, 10, Enchantment.FIRE_ASPECT, 5, Enchantment.LOOTING, 5, Enchantment.SWEEPING_EDGE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.BOW, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 BOW", Map.of(Enchantment.POWER, 25, Enchantment.PUNCH, 10, Enchantment.FLAME, 5, Enchantment.LOOTING, 5, Enchantment.INFINITY, 1, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_PICKAXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 PICKAXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_AXE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 AXE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_SHOVEL, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 SHOVEL", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HOE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 HOE", Map.of(Enchantment.EFFICIENCY, 25, Enchantment.FORTUNE, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_HELMET, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 HELMET", Map.of(Enchantment.PROTECTION, 25, Enchantment.AQUA_AFFINITY, 5, Enchantment.RESPIRATION, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_CHESTPLATE, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 CHESTPLATE", Map.of(Enchantment.PROTECTION, 25, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_LEGGINGS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 LEGGINGS", Map.of(Enchantment.PROTECTION, 25, Enchantment.SWIFT_SNEAK, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+        pool.addItem(CustomItemCollection.createSimpleCustomItem(Material.NETHERITE_BOOTS, 1, ChatColor.GOLD + "" + ChatColor.BOLD + "TIER 10 BOOTS", Map.of(Enchantment.PROTECTION, 25, Enchantment.FEATHER_FALLING, 10, Enchantment.FROST_WALKER, 5, Enchantment.SOUL_SPEED, 5, Enchantment.DEPTH_STRIDER, 5, Enchantment.THORNS, 5, Enchantment.UNBREAKING, 5, Enchantment.MENDING, 1), true), LootPool.Rarity.MYTHIC);
+
+        pool.calculateWeight();
+        return pool;
+    }
 }
