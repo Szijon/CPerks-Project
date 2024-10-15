@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import test.server.ririyo.cPerks.lootcrate.LootCrateKeyItem;
-import test.server.ririyo.cPerks.perks.AllPerksCollection;
+import test.server.ririyo.cPerks.perks.perklogic.PerkLogic;
 import test.server.ririyo.cPerks.collections.CustomItemCollection;
 import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
@@ -27,7 +27,7 @@ public class PerkMenuCollection {
     /// PERK OVERVIEW
 
     public static void toggleOnFeatureClick(Player player, Inventory inventory, NamespacedKey key){
-        String path = AllPerksCollection.keyToPathConverter.get(key);
+        String path = PerkLogic.keyToPathConverter.get(key);
         boolean state = Boolean.parseBoolean(UserDataHandler.get(player, player.getUniqueId(), path));
         if(state){
             UserDataHandler.set(player, player.getUniqueId(), path, false);

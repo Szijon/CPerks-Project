@@ -1,8 +1,4 @@
-package test.server.ririyo.cPerks.perks.features;
-
-import org.bukkit.ChatColor;
-
-import static java.util.Collections.nCopies;
+package test.server.ririyo.cPerks.handlers;
 
 public class FormatHandler {
 

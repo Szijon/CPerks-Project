@@ -1,6 +1,7 @@
 package test.server.ririyo.cPerks.collections;
 
 import org.bukkit.NamespacedKey;
+import org.checkerframework.checker.units.qual.N;
 import test.server.ririyo.cPerks.CPerks;
 
 import java.util.Map;
@@ -11,6 +12,12 @@ public class NamespacedKeyCollection {
     ///LOOT CRATES
     public static NamespacedKey LootCrateKey = new NamespacedKey(CPerks.getInstance(), "Is-Loot-Crate");
     public static NamespacedKey LootCrateKeyKey = new NamespacedKey(CPerks.getInstance(), "LootCrateKey");
+
+    public static NamespacedKey CustomItemKey = new NamespacedKey(CPerks.getInstance(), "Custom-Item");
+
+    ///CUSTOM ENCHANTMENTS
+    public static NamespacedKey TelekinesisEnchant = new NamespacedKey(CPerks.getInstance(), "CE-Telekinesis");
+    public static NamespacedKey UnbreakableEnchant = new NamespacedKey(CPerks.getInstance(), "CE-Unbreakable");
 
     ///PERK OVERVIEW
         ///BUTTON TO GET BACK

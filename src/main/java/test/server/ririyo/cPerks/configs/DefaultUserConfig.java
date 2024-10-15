@@ -63,6 +63,7 @@ public class DefaultUserConfig {
         ConfigHandler.addValue(cfg, "Hunter.Total-Experience", 0);
         ConfigHandler.addValue(cfg, "Hunter.Backpack", false);
         ConfigHandler.addValue(cfg, "Hunter.Backpack-Size", 0);
+        ConfigHandler.addValue(cfg, "Hunter.Hunted-Amount", 0);
         ConfigHandler.addValue(cfg, "Hunter.Egg-Hunter", false);
         ConfigHandler.addValue(cfg, "Hunter.Egg-Hunter-Chance", 0);
 

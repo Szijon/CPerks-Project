@@ -35,6 +35,17 @@ public class FarmerCollection {
             Material.DIAMOND_HOE,
             Material.NETHERITE_HOE,
     };
+
+    public static Material[] seeds = {
+            Material.BEETROOT_SEEDS,
+            Material.BEETROOTS,
+            Material.WHEAT,
+            Material.WHEAT_SEEDS,
+            Material.CARROTS,
+            Material.POTATOES
+    };
+
+
     public static Material[] tools_axes = {
             Material.WOODEN_AXE,
             Material.STONE_AXE,
@@ -63,14 +74,4 @@ public class FarmerCollection {
         Material.PUMPKIN,
         Material.MELON,
     };
-
-    public static Map<Material, Integer> expMulti = Map.ofEntries(
-            Map.entry(Material.WHEAT, 3),
-            Map.entry(Material.BEETROOT, 3),
-            Map.entry(Material.CARROT, 2),
-            Map.entry(Material.POTATO, 2),
-            Map.entry(Material.NETHER_WART, 2),
-            Map.entry(Material.PUMPKIN, 5),
-            Map.entry(Material.MELON, 5)
-    );
 }

@@ -78,13 +78,14 @@ public class SaleMenuCollection {
             Map.entry(Material.PUMPKIN, 6),
             Map.entry(Material.MELON_SLICE, 1),
             Map.entry(Material.MELON, 9),
+            Map.entry(Material.POISONOUS_POTATO, 1),
                 ///CROP SEEDS
-            Map.entry(Material.WHEAT_SEEDS, 3),
+            Map.entry(Material.WHEAT_SEEDS, 2),
             Map.entry(Material.BEETROOT_SEEDS, 3),
             Map.entry(Material.MELON_SEEDS, 1),
             Map.entry(Material.PUMPKIN_SEEDS, 1),
 
-            ///ENCHANTER GOT NOTHING TO SELL
+            ///ENCHANTER GOT NOTHING TO SELL YET
 
             ///HUNTER ITEMS
                 ///PASSIVES
@@ -92,6 +93,7 @@ public class SaleMenuCollection {
             Map.entry(Material.PORKCHOP, 6),
             Map.entry(Material.BEEF, 6),
             Map.entry(Material.CHICKEN, 6),
+            Map.entry(Material.EGG, 6),
             Map.entry(Material.COOKED_MUTTON, 9),
             Map.entry(Material.COOKED_PORKCHOP, 9),
             Map.entry(Material.COOKED_BEEF, 6),
@@ -114,6 +116,9 @@ public class SaleMenuCollection {
             Map.entry(Material.SHULKER_SHELL, 16),
             Map.entry(Material.ENDER_PEARL, 6),
             Map.entry(Material.PRISMARINE_SHARD, 12),
-            Map.entry(Material.PRISMARINE_CRYSTALS, 12)
+            Map.entry(Material.PRISMARINE_CRYSTALS, 12),
+
+            /// OTHER ITEMS
+            Map.entry(Material.GOLDEN_APPLE, 25)
     );
 }

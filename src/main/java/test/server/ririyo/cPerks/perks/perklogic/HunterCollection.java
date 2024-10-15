@@ -48,6 +48,7 @@ public class HunterCollection {
             Map.entry(EntityType.DONKEY, 4),
             Map.entry(EntityType.HORSE, 4),
             Map.entry(EntityType.MULE, 4),
+            Map.entry(EntityType.TRADER_LLAMA, 4),
 
             ///FRIENDLIES
             Map.entry(EntityType.CAT, -1),

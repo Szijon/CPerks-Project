@@ -1,5 +1,5 @@
 name: CPerks
-version: '0.5'
+version: '0.8'
 main: test.server.ririyo.cPerks.CPerks
 api-version: '1.21'
 commands:

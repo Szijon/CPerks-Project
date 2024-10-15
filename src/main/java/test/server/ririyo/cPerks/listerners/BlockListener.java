@@ -3,9 +3,9 @@ package test.server.ririyo.cPerks.listerners;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -13,12 +13,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Wood;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.spawner.Spawner;
 import org.bukkit.util.Vector;
 import test.server.ririyo.cPerks.collections.*;
+import test.server.ririyo.cPerks.enchantments.CustomEnchantments;
 import test.server.ririyo.cPerks.perks.features.SilkTouchSpawners;
 import test.server.ririyo.cPerks.configs.BlockDataHandler;
 import test.server.ririyo.cPerks.lootcrate.HologramHandler;
@@ -37,50 +37,111 @@ public class BlockListener implements Listener {
     void onPlayerBreakBlock(BlockBreakEvent event){
 
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
         Block startBlock = event.getBlock();
         Material blockType = startBlock.getType();
-        String job;
+        String perk = null;
 
-            ///EXECUTES WOODCUTTER LOGIC IF THE BLOCK IS REGISTERED AS A WOOD BLOCK
+            ///SET THE PERK IN USE
         if(Arrays.asList(WoodCutterCollection.blockList).contains(blockType)){
-            event.setCancelled(true);
-            job = "Woodcutter";
-            ItemStack tool = Objects.requireNonNull(player.getEquipment()).getItemInMainHand();
-
-            int brokenBlocks = WoodCutter.mine(player, uuid, startBlock, tool);
-
-            if(Arrays.asList(WoodCutterCollection.tools).contains(tool.getType())) {
-                damageTool(player, tool, getToolDamage(tool, brokenBlocks));
-            }
-            PlayerLevelHandler.addExperience(player, job, brokenBlocks);
-
-            ///EXECUTES MINER LOGIC IF THE ITEM IS REGISTERED AS A MINER BLOCK AND BROKEN BLOCK DROPS AN ITEM
+            perk = "Woodcutter";
         } else if (Arrays.asList(MinerCollection.blockList).contains(blockType)) {
             if (!startBlock.getDrops(Objects.requireNonNull(player.getEquipment()).getItemInMainHand()).isEmpty()) {
-                event.setCancelled(true);
-                job = "Miner";
-                ItemStack tool = Objects.requireNonNull(player.getEquipment()).getItemInMainHand();
-
-                int brokenBlocks = Miner.mine(player, uuid, startBlock, tool);
-                damageTool(player, tool, getToolDamage(tool, brokenBlocks));
-                PlayerLevelHandler.addExperience(player, job, brokenBlocks * MinerCollection.expMulti.get(blockType));
+                perk = "Miner";
             }
-
-            ///EXECUTES FARMER LOGIC IF THE ITEM IS A CROP
         } else if (Arrays.asList(FarmerCollection.blockList).contains(blockType)) {
-            job = "Farmer";
-            ItemStack tool = Objects.requireNonNull(player.getEquipment()).getItemInMainHand();
+            perk = "Farmer";
+        }
 
-            int exp = Farmer.harvestCrops(player, uuid, startBlock, tool, event);
-                ///DAMAGES TOOL IF A FARMER TOOL IS USED
-            if(Arrays.asList(FarmerCollection.tools_hoes).contains(tool.getType()) || Arrays.asList(FarmerCollection.tools_axes).contains(tool.getType())) {
-                damageTool(player, tool, getToolDamage(tool, exp));
+        if(perk != null){
+            event.setCancelled(true);
+            PerkLogic.BlocksMined blocksMined = PerkLogic.mineBlock(player, Objects.requireNonNull(player.getEquipment()).getItemInMainHand(), event, perk);
+            event.setExpToDrop(blocksMined.getExpOrbs());
+            Map<Block, Collection<ItemStack>> drops = blocksMined.getDrops();
+            int brokenBlocks = 0;
+
+            for(Block block : blocksMined.getList()){
+                if(perk.equalsIgnoreCase("farmer")){
+                    Ageable ageable = (Ageable) block.getBlockData();
+                    if(blocksMined.getHarvester() && Arrays.asList(FarmerCollection.tools_hoes).contains(blocksMined.getTool().getType())){
+                        if (ageable.getMaximumAge() == ageable.getAge()) {
+                            if (blocksMined.getReplant()) {
+                                ageable.setAge(0);
+                                block.setBlockData(ageable);
+                            } else {
+                                block.setType(Material.AIR);
+                            }
+                            brokenBlocks++;
+                        } else {
+                            if(blocksMined.getReplant()){
+                                drops.remove(block);
+                            }
+                        }
+                    } else {
+                        if(blocksMined.getReplant()) {
+                            if (ageable.getAge() == ageable.getMaximumAge()) {
+                                ageable.setAge(0);
+                                block.setBlockData(ageable);
+                            } else {
+                                block.setType(Material.AIR);
+                            }
+                            brokenBlocks++;
+                        } else {
+                            if(ageable.getMaximumAge() == ageable.getAge()) {
+                                block.setType(Material.AIR);
+                                brokenBlocks++;
+                            } else {
+                                block.setType(Material.AIR);
+                            }
+                        }
+                    }
+
+                } else if (perk.equalsIgnoreCase("woodcutter")){
+                    if(Arrays.asList(WoodCutterCollection.tools).contains(blocksMined.getTool().getType())){
+                        if (blocksMined.getReplant()) {
+                            Material blockBelow = block.getWorld().getBlockAt(block.getLocation().add(new Vector(0, -1, 0))).getType();
+                            if (blockBelow == Material.GRASS_BLOCK || blockBelow == Material.DIRT || blockBelow == Material.PODZOL) {
+                                block.setType(WoodCutterCollection.saplingMatch.get(startBlock.getType()));
+                            } else {
+                                block.setType(Material.AIR);
+                            }
+                            brokenBlocks++;
+                        } else {
+                            block.setType(Material.AIR);
+                            brokenBlocks++;
+                        }
+                    } else {
+                        startBlock.setType(Material.AIR);
+                        brokenBlocks++;
+                    }
+                } else if (perk.equalsIgnoreCase("miner")) {
+                    if(blocksMined.getTool().getType().toString().contains("PICKAXE")) {
+                        block.setType(Material.AIR);
+                        if(blocksMined.getExpOrbs() > 0) {
+                            ((ExperienceOrb) block.getWorld().spawnEntity(block.getLocation(), EntityType.EXPERIENCE_ORB)).setExperience(blocksMined.getExpOrbs());
+                        }
+                        brokenBlocks++;
+                    }
+                } else {
+                    block.setType(Material.AIR);
+                    brokenBlocks++;
+                }
             }
 
-            PlayerLevelHandler.addExperience(player, job, exp);
+            if(drops != null) {
+                ItemStack item = event.getPlayer().getEquipment().getItemInMainHand();
+                if(item != null) {
+                    for (Map.Entry<Block, Collection<ItemStack>> entry : drops.entrySet()) {
+                        CustomEnchantments.processCustomEnchants(item, event, drops.get(entry.getKey()));
+                    }
+                }
+            }
 
-            ///DROPS A SPAWNER IF PLAYER HAS A SILK-TOUCH TOOL AND UNLOCKED THE REQUIRED FEATURE ||| SPAWNERS DO NOT DROP NORMALLY.
+            ///DAMAGE TOOL
+            if(Arrays.asList(PerkLogic.tools).contains(blocksMined.getTool().getType())) {
+                damageTool(player, blocksMined.getTool(), PerkLogic.calculateDamage(blocksMined.getTool(), brokenBlocks));
+            }
+            PlayerLevelHandler.addExperience(player, perk, PerkLogic.expMultiplier.get(blockType) * brokenBlocks);
+
         } else if (blockType == Material.SPAWNER){
             ItemStack tool = Objects.requireNonNull(player.getEquipment()).getItemInMainHand();
             boolean unlocked = Boolean.parseBoolean(UserDataHandler.get(player, player.getUniqueId(), "Shop.Spawner"));
@@ -98,6 +159,15 @@ public class BlockListener implements Listener {
             } else {
                 event.setCancelled(true);
             }
+        } else {
+            ItemStack item = player.getEquipment().getItemInMainHand();
+            if(item.hasItemMeta()) {
+                if (item.getItemMeta().getPersistentDataContainer().has(NamespacedKeyCollection.TelekinesisEnchant)) {
+                    event.setCancelled(true);
+                    CustomEnchantments.processCustomEnchants(item, event, event.getBlock().getDrops(item));
+                    event.getBlock().setType(Material.AIR);
+                }
+            }
         }
     }
 
@@ -108,13 +178,15 @@ public class BlockListener implements Listener {
         Block targetBlock = event.getBlock();
 
             ///IF THE SPAWNER IS A CUSTOM SPAWNER (FROM SILK TOUCH MINED OR LOOT CRATE) CHANGES MOB AS SPAWNER IS EMPTY BY DEFAULT
-        if(targetBlock.getType() == Material.SPAWNER && item.getItemMeta().getPersistentDataContainer().has(NamespacedKeyCollection.SpawnerKey)){
+        if(targetBlock.getType() == Material.SPAWNER && item.getItemMeta().getPersistentDataContainer().has(NamespacedKeyCollection.SpawnerKey)) {
             ItemMeta itemMeta = item.getItemMeta();
             PersistentDataContainer spawnerDC = itemMeta.getPersistentDataContainer();
             String entityType = spawnerDC.get(NamespacedKeyCollection.SpawnerKey, PersistentDataType.STRING);
             BlockState blockState = targetBlock.getState();
             Spawner spawner = (Spawner) blockState;
             spawner.setSpawnedType(EntityType.valueOf(entityType));
+            spawner.setMaxNearbyEntities(50);
+            spawner.setRequiredPlayerRange(30);
             blockState.update(true);
 
             ///ADDS A LOOT CRATE BLOCK TO THE CONFIG TO ENABLE INTERACTION WITH IT AND PREVENT PLAYERS FROM BREAKING IT WITHOUT PERMISSION
@@ -125,25 +197,19 @@ public class BlockListener implements Listener {
         }
     }
         ///USED TO DAMAGE A USED TOOL
-    public void damageTool(Player player, ItemStack tool, int damageAmount){
+    public static void damageTool(Player player, ItemStack tool, int damageAmount){
         Damageable damageable = (Damageable) tool.getItemMeta();
         assert damageable != null;
-        damageable.setDamage(damageable.getDamage() + damageAmount);
+        if(tool.getItemMeta().getPersistentDataContainer().has(NamespacedKeyCollection.UnbreakableEnchant)){
+            damageable.setDamage(0);
+        } else {
+            damageable.setDamage(damageable.getDamage() + damageAmount);
+        }
         if (damageable.getDamage() >= tool.getType().getMaxDurability()) {
             tool.setItemMeta(damageable);
             Objects.requireNonNull(player.getEquipment()).setItemInMainHand(new ItemStack(Material.AIR));
         } else {
             tool.setItemMeta(damageable);
         }
-    }
-        ///CALCULATES DAMAGE APPLIED TO TOOL BASED ON IT'S UNBREAKING ENCHANTMENT
-    public int getToolDamage(ItemStack tool, int brokenBlocks){
-        int damage = brokenBlocks;
-        if(tool.containsEnchantment(Enchantment.UNBREAKING)){
-            int enchantmentLevel = tool.getEnchantmentLevel(Enchantment.UNBREAKING);
-            double d = brokenBlocks * ((double) 100 / enchantmentLevel / 100);
-            damage = (int) Math.round(d);
-        }
-        return damage;
     }
 }

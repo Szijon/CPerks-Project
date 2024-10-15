@@ -6,12 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import test.server.ririyo.cPerks.lootcrate.LootPool;
-import test.server.ririyo.cPerks.lootcrate.LootPoolCollection;
 import test.server.ririyo.cPerks.perks.perkmenu.MenuCollection;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
-import test.server.ririyo.cPerks.perks.features.FormatHandler;
 
 public class PlayerMessageHandler {
 
@@ -71,7 +68,7 @@ public class PlayerMessageHandler {
         ///SENDS A MESSAGE WHEN THE PLAYER DROPS A RARE ITEM LIKE A LOOT-KEY(0.033%) OR A SPAWN-EGG(LEVEL 15 HUNTER 0.1%)
     public static void sendRareDropMessage(Player player, String item, int amount){
         player.sendMessage(PURPLE + "RARE!" + " You've dropped " + amount + " " + item + "!");
-        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 0.25f, 1);
     }
         ///SENDS A MESSAGE TO A PLAYER WHEN THEY USE THE COMMAND /FLIGHT TIME OR THEY ADD MORE FLIGHT TIME BY USING A FLIGHT CREDIT ITEM
     public static void sendFlightTime(Player player){

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import test.server.ririyo.cPerks.CPerks;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
+import test.server.ririyo.cPerks.handlers.FormatHandler;
 import test.server.ririyo.cPerks.handlers.PlayerMessageHandler;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class FlightHandler {
 
-    private static HashMap<UUID, BukkitRunnable> activeTimers = new HashMap<>();
+    public static HashMap<UUID, BukkitRunnable> activeTimers = new HashMap<>();
     private static HashMap<UUID, Integer> timeLeft = new HashMap<>();
 
         ///TOGGLES FLIGHT IF PLAYER HAS ENOUGH FLIGHT TIME AND STARTS THE FLIGHT TIMER

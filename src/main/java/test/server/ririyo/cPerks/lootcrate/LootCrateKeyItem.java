@@ -46,6 +46,7 @@ public class LootCrateKeyItem {
                 color + displayName,
                 List.of("", ChatColor.GREEN + "Use at Spawn to Open Loot Crate!"),
                 Map.of(Enchantment.SHARPNESS, 1),
+                null,
                 List.of(ItemFlag.HIDE_ENCHANTS),
                 NamespacedKeyCollection.LootCrateKeyKey,
                 PersistentDataType.STRING,

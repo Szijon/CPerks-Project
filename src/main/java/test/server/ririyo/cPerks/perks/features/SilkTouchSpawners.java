@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.spawner.Spawner;
 import test.server.ririyo.cPerks.collections.CustomItemCollection;
+import test.server.ririyo.cPerks.handlers.FormatHandler;
 
 public class SilkTouchSpawners {
 
@@ -28,7 +29,7 @@ public class SilkTouchSpawners {
         player.setLevel(0);
         player.setExp(0);
         player.setTotalExperience(0);
-        player.giveExp(prevExp-1395); ///1395 is the exact amount of exp needed to become lv 30
+        player.giveExp(prevExp - 1395); ///1395 is the exact amount of exp needed to become lv 30
     }
 
     public static String getSpawnerName(EntityType entityType){

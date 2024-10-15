@@ -2,6 +2,7 @@ package test.server.ririyo.cPerks.lootcrate;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +16,7 @@ import test.server.ririyo.cPerks.collections.CustomItemCollection;
 import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
 import test.server.ririyo.cPerks.configs.BlockDataHandler;
 import test.server.ririyo.cPerks.handlers.PlayerMessageHandler;
+import test.server.ririyo.cPerks.perks.perklogic.PerkLogic;
 
 import java.util.*;
 
@@ -85,13 +87,9 @@ public class LootCrateHandler {
 
         for (int i = 0; i < amount; i++) {
             LootPool.Drop loot = getRandomDrop(pool);
-            if (player.getInventory().firstEmpty() != -1) {
-                player.getInventory().addItem(loot.getItem());
-            } else {
-                player.getWorld().dropItemNaturally(player.getLocation(), loot.getItem());
-            }
+            PerkLogic.putInPlayerInventory(player, loot.getItem());
             PlayerMessageHandler.broadcastRareDrop(player, loot, pool);
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1);
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.25f, 1);
         }
     }
 
@@ -213,6 +211,8 @@ public class LootCrateHandler {
                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5f, 1);
                     }
                 }
+            } else if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
+                event.setCancelled(true);
             }
         }
     }

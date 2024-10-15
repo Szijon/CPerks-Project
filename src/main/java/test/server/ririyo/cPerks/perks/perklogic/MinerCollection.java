@@ -102,40 +102,7 @@ public class MinerCollection {
             Material.NETHER_GOLD_ORE,
             Material.ANCIENT_DEBRIS
     };
-        ///MAP OF BLOCKS(KEY) AND THEIR RESPECTIVE PERK-EXPERIENCE MULTIPLIER(VALUE)
-    public static final Map<Material, Integer> expMulti  = Map.ofEntries(
-            Map.entry(Material.STONE, 1),
-            Map.entry(Material.TUFF, 1),
-            Map.entry(Material.END_STONE, 1),
-            Map.entry(Material.DEEPSLATE, 1),
-            Map.entry(Material.DIORITE, 1),
-            Map.entry(Material.GRANITE, 1),
-            Map.entry(Material.ANDESITE, 1),
-            Map.entry(Material.COAL_ORE, 3),
-            Map.entry(Material.OBSIDIAN, 3),
-            Map.entry(Material.DEEPSLATE_COAL_ORE, 3),
-            Map.entry(Material.COPPER_ORE, 3),
-            Map.entry(Material.DEEPSLATE_COPPER_ORE, 3),
-            Map.entry(Material.IRON_ORE, 6),
-            Map.entry(Material.DEEPSLATE_IRON_ORE, 6),
-            Map.entry(Material.LAPIS_ORE, 6),
-            Map.entry(Material.DEEPSLATE_LAPIS_ORE, 6),
-            Map.entry(Material.GOLD_ORE, 9),
-            Map.entry(Material.DEEPSLATE_GOLD_ORE, 9),
-            Map.entry(Material.REDSTONE_ORE, 6),
-            Map.entry(Material.DEEPSLATE_REDSTONE_ORE, 6),
-            Map.entry(Material.DIAMOND_ORE, 15),
-            Map.entry(Material.DEEPSLATE_DIAMOND_ORE, 15),
-            Map.entry(Material.EMERALD_ORE, 20),
-            Map.entry(Material.DEEPSLATE_EMERALD_ORE, 20),
-            Map.entry(Material.NETHER_QUARTZ_ORE, 6),
-            Map.entry(Material.NETHER_GOLD_ORE, 3),
-            Map.entry(Material.NETHERRACK, 1),
-            Map.entry(Material.ANCIENT_DEBRIS, 50),
-            Map.entry(Material.RAW_COPPER_BLOCK, 27),
-            Map.entry(Material.RAW_IRON_BLOCK, 54),
-            Map.entry(Material.RAW_GOLD_BLOCK, 81)
-    );
+
         ///MAP OF DROPPED ITEMS(KEY) AND THEIR CONVERTED AUTO SMELT RESULT(VALUE)
     public static final Map<Material, Material> AutoSmeltConverter = Map.ofEntries(
             Map.entry(Material.RAW_IRON, Material.IRON_INGOT),

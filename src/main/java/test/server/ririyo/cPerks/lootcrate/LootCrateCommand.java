@@ -9,6 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import test.server.ririyo.cPerks.CPerks;
 import test.server.ririyo.cPerks.collections.CommandCollection;
+import test.server.ririyo.cPerks.collections.CustomItemCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,9 @@ public class LootCrateCommand implements CommandExecutor, TabCompleter {
                                 break;
                             case "key:mythic":
                                 LootCrateHandler.giveLootCrateKey(target, amount, LootCrateKeyItem.LootKeyType.MYTHIC);
+                                break;
+                            case "bucket":
+                                player.getInventory().addItem(CustomItemCollection.getInfiniteWaterBucket());
                                 break;
                         }
                         break;

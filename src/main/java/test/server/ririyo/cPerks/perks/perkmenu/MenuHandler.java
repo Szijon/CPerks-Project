@@ -210,7 +210,8 @@ public class MenuHandler {
         int goldAmount = 0;
         for(ItemStack item : inventory.getContents()){
             if(item != null) {
-                if (SaleMenuCollection.prices.containsKey(item.getType())) {
+                ItemMeta meta = item.getItemMeta();
+                if (SaleMenuCollection.prices.containsKey(item.getType()) && meta.getPersistentDataContainer().isEmpty()) {
                     goldAmount += SaleMenuCollection.prices.get(item.getType()) * item.getAmount();
                 } else {
                     if (player.getInventory().firstEmpty() != -1) {

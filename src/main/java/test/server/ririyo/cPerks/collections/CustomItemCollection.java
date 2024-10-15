@@ -8,13 +8,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
-import test.server.ririyo.cPerks.perks.AllPerksCollection;
+import test.server.ririyo.cPerks.enchantments.CustomEnchantments;
+import test.server.ririyo.cPerks.perks.perklogic.PerkLogic;
 import test.server.ririyo.cPerks.perks.features.SilkTouchSpawners;
-import test.server.ririyo.cPerks.perks.features.FormatHandler;
+import test.server.ririyo.cPerks.handlers.FormatHandler;
 
 import java.util.*;
 
@@ -22,7 +24,7 @@ public class CustomItemCollection {
     ///COLLECTION OF ALL SORTS OF CUSTOM ITEMS. USED IN MENU DISPLAYING.
 
     ///FUNCTION TO CREATE BASIC CUSTOM ITEM WITH ABILITY TO CHANGE NAME AND ADDING ENCHANTMENTS BUT NOT USABLE FOR FUNCTIONS
-    public static ItemStack createSimpleCustomItem(Material material, int amount, String displayName, Map<Enchantment, Integer> enchantments, boolean loreEnchantments){
+    public static ItemStack createSimpleCustomItem(Material material, int amount, String displayName, Map<Enchantment, Integer> enchantments, Map<CustomEnchantments.CustomEnchantment, Integer> customEnchantments){
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         if(meta != null){
@@ -30,29 +32,26 @@ public class CustomItemCollection {
                 meta.setDisplayName(displayName);
             }
             if(enchantments != null) {
-                List<String> enchantLore = new ArrayList<>(List.of());
                 for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                     meta.addEnchant(entry.getKey(), entry.getValue(), true);
-                    if(loreEnchantments) {
-                        String enchantmentName = entry.getKey().getKey().getKey();
-                        enchantLore.add(FormatHandler.convertString(enchantmentName) + " " + entry.getValue());
-                    }
-                }
-                if(loreEnchantments) {
-                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    meta.setLore(enchantLore);
                 }
             }
             item.setItemMeta(meta);
+            if(customEnchantments != null) {
+                CustomEnchantments.convertEnchantments(item);
+                for (Map.Entry<CustomEnchantments.CustomEnchantment,Integer> entry : customEnchantments.entrySet()){
+                    CustomEnchantments.addCustomEnchantment(item, entry.getKey(), entry.getValue());
+                }
+            }
         }
         return item;
     }
 
     ///USED TO CREATE MORE COMPLEX CUSTOM ITEMS WITH ABILITY TO BE USED FOR FUNCTIONS.
-    public static ItemStack createCustomItem(Material material, int amount, String displayName, List<String> lore, Map<Enchantment, Integer> enchantments, List<ItemFlag> itemFlags, NamespacedKey pdcKey, PersistentDataType pdcType, Object pdcValue){
-        ItemStack customItem;
-        customItem = new ItemStack(material, amount);
-        ItemMeta meta = customItem.getItemMeta();
+    public static ItemStack createCustomItem(Material material, int amount, String displayName, List<String> lore, Map<Enchantment, Integer> enchantments, Map<CustomEnchantments.CustomEnchantment, Integer> customEnchantments, List<ItemFlag> itemFlags, NamespacedKey pdcKey, PersistentDataType pdcType, Object pdcValue){
+        ItemStack item;
+        item = new ItemStack(material, amount);
+        ItemMeta meta = item.getItemMeta();
         if(meta != null){
             if(displayName != null){
                 meta.setDisplayName(displayName);
@@ -65,6 +64,12 @@ public class CustomItemCollection {
                     meta.addEnchant(entry.getKey(), entry.getValue(), true);
                 }
             }
+            if(customEnchantments != null){
+                CustomEnchantments.convertEnchantments(item);
+                for (Map.Entry<CustomEnchantments.CustomEnchantment,Integer> entry : customEnchantments.entrySet()){
+                    CustomEnchantments.addCustomEnchantment(item, entry.getKey(), entry.getValue());
+                }
+            }
             if(itemFlags != null){
                 for (ItemFlag flag : itemFlags){
                     meta.addItemFlags(flag);
@@ -74,9 +79,9 @@ public class CustomItemCollection {
                 PersistentDataContainer pdc = meta.getPersistentDataContainer();
                 pdc.set(pdcKey, pdcType, pdcValue);
             }
-            customItem.setItemMeta(meta);
+            item.setItemMeta(meta);
         }
-        return customItem;
+        return item;
     }
 
 
@@ -91,6 +96,7 @@ public class CustomItemCollection {
                 ChatColor.GOLD + "Loot Crate",
                 List.of(ChatColor.BLUE + "", ChatColor.BLUE + "Used to place down an interactive Loot Crate."),
                 Map.of(Enchantment.SHARPNESS, 1),
+                null,
                 List.of(ItemFlag.HIDE_ENCHANTS),
                 NamespacedKeyCollection.LootCrateKey,
                 PersistentDataType.BOOLEAN,
@@ -108,11 +114,22 @@ public class CustomItemCollection {
                 SilkTouchSpawners.getSpawnerName(entityType),
                 null,
                 null,
+                null,
                 List.of(ItemFlag.HIDE_ADDITIONAL_TOOLTIP),
                 NamespacedKeyCollection.SpawnerKey,
                 PersistentDataType.STRING,
                 entityType.name()
         );
+    }
+
+    public static ItemStack createEnchantedBook(Map<Enchantment, Integer> enchantments){
+        ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
+        EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
+        for(Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()){
+            meta.addStoredEnchant(entry.getKey(), entry.getValue(), true);
+        }
+        item.setItemMeta(meta);
+        return item;
     }
                 /// USABLE ITEM TO ADD FLIGHT TIME
     public static ItemStack getFlightCredit(int time){
@@ -123,9 +140,25 @@ public class CustomItemCollection {
                 getTimeStrings(time),
                 null,
                 null,
+                null,
                 NamespacedKeyCollection.FlightKey,
                 PersistentDataType.INTEGER,
                 time
+        );
+    }
+
+    public static ItemStack getInfiniteWaterBucket(){
+        return createCustomItem(
+                Material.WATER_BUCKET,
+                1,
+                ChatColor.AQUA + "Magical Water Bucket",
+                List.of(ChatColor.BLUE + "A Water Bucket that seems Infinite."),
+                Map.of(Enchantment.MENDING, 1),
+                null,
+                List.of(ItemFlag.HIDE_ENCHANTS),
+                NamespacedKeyCollection.CustomItemKey,
+                PersistentDataType.STRING,
+                "MagicalWaterBucket"
         );
     }
     /// MENU ITEMS
@@ -136,7 +169,7 @@ public class CustomItemCollection {
                 1,
                 " ",
                 null,
-                false
+                null
         );
     }
     public static ItemStack getSellInterfaceItem(){
@@ -145,6 +178,7 @@ public class CustomItemCollection {
                 1,
                 ChatColor.GOLD + "Sell Items",
                 List.of(" ", ChatColor.BLUE + "Put Items to sell in this Inventory", ChatColor.GREEN + "Close" + ChatColor.BLUE + " it to confirm Sale.", ChatColor.BLUE + "Unsellable Items will be returned to your Inventory."),
+                null,
                 null,
                 null,
                 NamespacedKeyCollection.SellKey,
@@ -162,6 +196,7 @@ public class CustomItemCollection {
                 null,
                 null,
                 null,
+                null,
                 NamespacedKeyCollection.PerkShopKey,
                 PersistentDataType.BOOLEAN,
                 true
@@ -170,10 +205,11 @@ public class CustomItemCollection {
             ///USED TO GRAB AN ITEM THAT DISPLAYS A PERK'S STATISTICS LIKE LEVEL & EXP
     public static ItemStack getPerkItem(Player player, String perk){
         return createCustomItem(
-                AllPerksCollection.perkIcon.get(perk),
+                PerkLogic.perkIcon.get(perk),
                 1,
                 ChatColor.AQUA + perk,
-                AllPerksCollection.getPerkDescription(player, perk),
+                PerkLogic.getPerkDescription(player, perk),
+                null,
                 null,
                 List.of(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ATTRIBUTES),
                 null,
@@ -183,16 +219,17 @@ public class CustomItemCollection {
     }
             ///USED TO GRAB AN ITEM THAT DISPLAYS A FEATURE'S STATE, IF IT'S UNLOCKED AND AT WHICH LEVEL IT IS UNLOCKED, CAN ALSO BE CLICKED ON TO TOGGLE THE STATE
     public static ItemStack getFeatureItem(Player player, String perk, String feature){
-        boolean unlocked = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), perk + ".Level")) >= AllPerksCollection.featureLevels.get(feature);
+        boolean unlocked = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), perk + ".Level")) >= PerkLogic.featureLevels.get(feature);
         ChatColor nameColor;
         if(unlocked) nameColor = ChatColor.GREEN;
         else nameColor = ChatColor.RED;
 
         return createCustomItem(
-                AllPerksCollection.featureIcon.get(perk + "." + feature),
+                PerkLogic.featureIcon.get(perk + "." + feature),
                 1,
                 nameColor + feature,
-                AllPerksCollection.getUnlockDescription(player, perk, feature),
+                PerkLogic.getUnlockDescription(player, perk, feature),
+                null,
                 null,
                 List.of(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ATTRIBUTES),
                 NamespacedKeyCollection.featureKeys.get(perk + "." + feature),
@@ -211,6 +248,7 @@ public class CustomItemCollection {
                 List.of("", ChatColor.GREEN + "Opens the Coin Shop.", ChatColor.BLUE + "Used for purchasing Unlocks."),
                 null,
                 null,
+                null,
                 NamespacedKeyCollection.CoinShopKey,
                 PersistentDataType.BOOLEAN,
                 true
@@ -225,6 +263,7 @@ public class CustomItemCollection {
                 List.of("", ChatColor.GREEN + "Opens the Gold Shop.", ChatColor.BLUE + "Used for purchasing Usable Items."),
                 null,
                 null,
+                null,
                 NamespacedKeyCollection.GoldShopKey,
                 PersistentDataType.BOOLEAN,
                 true
@@ -236,6 +275,7 @@ public class CustomItemCollection {
                 Material.BEACON,
                 1,
                 ChatColor.AQUA + "Return to Perk Overview",
+                null,
                 null,
                 null,
                 null,

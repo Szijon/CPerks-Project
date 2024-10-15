@@ -3,7 +3,7 @@ package test.server.ririyo.cPerks.handlers;
 import org.bukkit.entity.Player;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
 import test.server.ririyo.cPerks.lootcrate.LootCrateHandler;
-import test.server.ririyo.cPerks.perks.AllPerksCollection;
+import test.server.ririyo.cPerks.perks.perklogic.PerkLogic;
 import test.server.ririyo.cPerks.perks.perklogic.EnchanterCollection;
 import test.server.ririyo.cPerks.perks.perklogic.HunterCollection;
 import test.server.ririyo.cPerks.perks.perklogic.MinerCollection;
@@ -61,7 +61,7 @@ public class PlayerLevelHandler {
 
         float chance = Float.parseFloat(UserDataHandler.get(player, player.getUniqueId(), "Player.Key-Chance"));
 
-        if(AllPerksCollection.getRandomChance(chance * amount)){
+        if(PerkLogic.getRandomChance(chance * amount)){
             LootCrateHandler.getRandomLootKeyDrop(player);
         }
         int gold = Integer.parseInt(UserDataHandler.get(player, player.getUniqueId(), "Player.Gold"));
@@ -82,7 +82,7 @@ public class PlayerLevelHandler {
         setPlayerLevel(player, job, level);
         setPlayerExperience(player, job, exp - levelUp);
 
-        int neededLevelUpExp = AllPerksCollection.levelUps.get(level);
+        int neededLevelUpExp = PerkLogic.levelUps.get(level);
         setPlayerLevelUpExp(player, job, neededLevelUpExp);
 
         PlayerMessageHandler.sendLevelUpMessage(player, job, level);
