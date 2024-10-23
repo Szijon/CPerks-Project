@@ -2,6 +2,7 @@ package test.server.ririyo.cPerks.lootcrate;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +12,7 @@ import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
 import java.util.List;
 import java.util.Map;
 
-import static test.server.ririyo.cPerks.collections.CustomItemCollection.createCustomItem;
+import static test.server.ririyo.cPerks.collections.CustomItemCollection.createCustomItemMutliplePDC;
 
 public class LootCrateKeyItem {
     public enum LootKeyType{
@@ -40,7 +41,11 @@ public class LootCrateKeyItem {
             case MYTHIC -> ChatColor.LIGHT_PURPLE;
         };
 
-        return createCustomItem(
+        NamespacedKey[] keys = {NamespacedKeyCollection.LootCrateKeyKey, NamespacedKeyCollection.SellOriginKey};
+        PersistentDataType[] types = {PersistentDataType.STRING, PersistentDataType.STRING};
+        String[] values = {type.getName(), type.getName()};
+
+        return createCustomItemMutliplePDC(
                 Material.TRIPWIRE_HOOK,
                 amount,
                 color + displayName,
@@ -48,9 +53,9 @@ public class LootCrateKeyItem {
                 Map.of(Enchantment.SHARPNESS, 1),
                 null,
                 List.of(ItemFlag.HIDE_ENCHANTS),
-                NamespacedKeyCollection.LootCrateKeyKey,
-                PersistentDataType.STRING,
-                type.getName()
+                keys,
+                types,
+                values
         );
     }
 

@@ -84,6 +84,43 @@ public class CustomItemCollection {
         return item;
     }
 
+    public static ItemStack createCustomItemMutliplePDC(Material material, int amount, String displayName, List<String> lore, Map<Enchantment, Integer> enchantments, Map<CustomEnchantments.CustomEnchantment, Integer> customEnchantments, List<ItemFlag> itemFlags, NamespacedKey[] pdcKey, PersistentDataType[] pdcType, Object[] pdcValue){
+        ItemStack item;
+        item = new ItemStack(material, amount);
+        ItemMeta meta = item.getItemMeta();
+        if(meta != null){
+            if(displayName != null){
+                meta.setDisplayName(displayName);
+            }
+            if(lore != null){
+                meta.setLore(lore);
+            }
+            if(enchantments != null){
+                for(Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()){
+                    meta.addEnchant(entry.getKey(), entry.getValue(), true);
+                }
+            }
+            if(customEnchantments != null){
+                CustomEnchantments.convertEnchantments(item);
+                for (Map.Entry<CustomEnchantments.CustomEnchantment,Integer> entry : customEnchantments.entrySet()){
+                    CustomEnchantments.addCustomEnchantment(item, entry.getKey(), entry.getValue());
+                }
+            }
+            if(itemFlags != null){
+                for (ItemFlag flag : itemFlags){
+                    meta.addItemFlags(flag);
+                }
+            }
+            if(pdcKey != null){
+                for(int i = 0; i < pdcKey.length; i++){
+                    PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                    pdc.set(pdcKey[i], pdcType[i], pdcValue[i]);
+                }
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
 
 
     ///LOOT CRATES

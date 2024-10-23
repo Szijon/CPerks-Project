@@ -31,17 +31,20 @@ public class MenuCollection {
                                                 ChatColor.BLUE + "Does " + ChatColor.RED + "NOT" + ChatColor.BLUE + " keep Exp on Death."};
 
     public static String[] keepExpDescription = {ChatColor.BLUE + "Prevents Exp Loss on Death.",
-            ChatColor.BLUE + "Does " + ChatColor.RED + "NOT" + ChatColor.BLUE + " keep Items on Death."};
+                                                ChatColor.BLUE + "Does " + ChatColor.RED + "NOT" + ChatColor.BLUE + " keep Items on Death."};
 
     public static String[] flightDescription = {ChatColor.BLUE + "Allows toggling Flight.",
-            ChatColor.BLUE + "Use" + ChatColor.GREEN + " /flight " + ChatColor.BLUE + "to Toggle.",
-            ChatColor.BLUE + "Use" + ChatColor.GREEN + " /flight time " + ChatColor.BLUE + "to check Time left."};
+                                                ChatColor.BLUE + "Use" + ChatColor.GREEN + " /flight " + ChatColor.BLUE + "to Toggle.",
+                                                ChatColor.BLUE + "Use" + ChatColor.GREEN + " /flight time " + ChatColor.BLUE + "to check Time left."};
 
     public static String[] glowDescription = {ChatColor.BLUE + "Allows toggling Glow Effect."};
 
         /// GOLD SHOP
     public static Map<String, Integer> goldShopPrices = Map.ofEntries(
-            Map.entry("Loot Key", 5000),
+            Map.entry("Normal Loot Key", 5000),
+            Map.entry("Rare Loot Key", 25000),
+            Map.entry("Legendary Loot Key", 75000),
+            Map.entry("Mythic Loot Key", 500000),
             Map.entry("Flight Credit", 2500)
     );
 }

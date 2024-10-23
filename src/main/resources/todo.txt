@@ -37,9 +37,9 @@ Allow player to sneak while opening a crate to open multiple    ✔
 Add Dropped Items from Perks to be sellable for Gold            ✔ - This will also be found in the editable config
 Adjust Farmer EXP Multiplier and exp gain                       ✔
 Add Custom Enchants                                             ✔
+Update Shop Interface and Sell Function                         ✔
 
 Make Unbreakable work with Armor  & Weapons                     ✖
-Update Shop Interface and Sell Function                         ✖
 Change Gold Gain                                                ✖
 
 Add Boosters: Perk Experience, Gold, Vanilla Experience         ✖ - Boosters that run for x time and give a 1.5x to 2x boost to a specified gain.

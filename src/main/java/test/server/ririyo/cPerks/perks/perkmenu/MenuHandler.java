@@ -170,8 +170,12 @@ public class MenuHandler {
 
         inventory.setItem(0, CustomItemCollection.getPerkShopItem());
         inventory.setItem(8, PerkMenuCollection.getGoldBalanceItem(player));
-        inventory.setItem(3 + 9*2, PerkMenuCollection.getLootKeyShopItem());
-        inventory.setItem(5 + 9*2, PerkMenuCollection.getFlightCreditShopItem());
+        inventory.setItem(1 + 9*4, PerkMenuCollection.getNormalLootKeyShopItem());
+        inventory.setItem(3 + 9*4, PerkMenuCollection.getRareLootKeyShopItem());
+        inventory.setItem(5 + 9*4, PerkMenuCollection.getLegendaryLootKeyShopItem());
+        inventory.setItem(7 + 9*4, PerkMenuCollection.getMythicLootKeyShopItem());
+
+        inventory.setItem(4 + 9*2, PerkMenuCollection.getFlightCreditShopItem());
 
         player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Gold-Shop"));
         player.updateInventory();
@@ -182,7 +186,7 @@ public class MenuHandler {
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         String itemName = null;
         if (pdc.has(NamespacedKeyCollection.LootKeyKey)) {
-            itemName = "Loot Key";
+            itemName = pdc.get(NamespacedKeyCollection.LootKeyKey, PersistentDataType.STRING);
         } else if (pdc.has(NamespacedKeyCollection.FlightCreditKey)) {
             itemName = "Flight Credit";
         }else if (pdc.has(NamespacedKeyCollection.PerkShopKey)) {
@@ -193,16 +197,6 @@ public class MenuHandler {
             attemptPurchase(player, itemName);
             updateMenuInventory(player, "Gold Shop", inventory);
         }
-    }
-
-    /// SELL ITEMS MENU
-
-    public static void setSellInventory(Player player, Inventory inventory){
-        for(int i = 0; i < inventory.getSize(); i++){
-            inventory.setItem(i , new ItemStack(Material.AIR));
-        }
-        player.setMetadata("Opened-Menu", new FixedMetadataValue(CPerks.getInstance(), "Selling Items"));
-        player.updateInventory();
     }
 
     public static void processSellingInterfaceClosure(Player player, Inventory inventory){
@@ -238,6 +232,14 @@ public class MenuHandler {
         player.updateInventory();
     }
 
+    public static void clearRow(Player player, Inventory inventory, int row){
+        row = row * 9;
+        for(int i = 0; i < 9; i++){
+            inventory.setItem(i+row, null);
+        }
+        player.updateInventory();
+    }
+
     public static void updateMenuInventory(Player player, String menu, Inventory inventory) {
         clearInventory(player, inventory);
 
@@ -254,41 +256,45 @@ public class MenuHandler {
             setPerkOverviewInventory(player, inventory);
 
         } else if(menu.equalsIgnoreCase("Selling Items")){
-            setSellInventory(player, inventory);
+            SaleMenu.setSellInventory(player, inventory);
         }
     }
 
-    public static boolean attemptPurchase(Player player, String itemName) {
+    public static void attemptPurchase(Player player, String itemName) {
 
         int price = MenuCollection.goldShopPrices.get(itemName);
         if (UserDataHandler.getPlayerGold(player) >= price) {
-            ItemStack item;
-            if (itemName.equalsIgnoreCase("Loot Key")) {
+            ItemStack item = null;
+            if (itemName.equalsIgnoreCase("Normal Loot Key")) {
                 item = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL);
-                if (player.getInventory().firstEmpty() != -1)
-                    player.getInventory().addItem(LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL));
-                else
-                    player.getLocation().getWorld().dropItemNaturally(player.getLocation(), LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL));
-                PlayerMessageHandler.sendPurchaseSuccessMessage(player, item.getItemMeta().getDisplayName());
-
+            } else if(itemName.equalsIgnoreCase("Rare Loot Key")) {
+                item = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.RARE);
+            } else if(itemName.equalsIgnoreCase("Legendary Loot Key")) {
+                item = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY);
+            } else if(itemName.equalsIgnoreCase("Mythic Loot Key")) {
+                item = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.MYTHIC);
             }
 
             if (itemName.equalsIgnoreCase("Flight Credit")) {
                 item = CustomItemCollection.getFlightCredit(900);
+            }
+
+            if(item != null) {
                 if (player.getInventory().firstEmpty() != -1)
                     player.getInventory().addItem(item);
                 else
                     player.getLocation().getWorld().dropItemNaturally(player.getLocation(), item);
                 PlayerMessageHandler.sendPurchaseSuccessMessage(player, item.getItemMeta().getDisplayName());
-            }
 
-            UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) - price);
-            ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
-            return true;
+                UserDataHandler.setPlayerGold(player, UserDataHandler.getPlayerGold(player) - price);
+                ScoreboardHandler.updateScoreboard(player, ScoreboardHandler.lastPerkUsed.get(player.getUniqueId()));
+
+            } else {
+                PlayerMessageHandler.sendPurchaseFailureMessage(player, itemName);
+            }
         } else {
             PlayerMessageHandler.sendPurchaseFailureMessage(player, itemName);
         }
-        return false;
     }
 
     public static boolean attemptUnlock(Player player, String unlock){

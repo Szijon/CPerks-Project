@@ -1,8 +1,11 @@
 package test.server.ririyo.cPerks.handlers;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import test.server.ririyo.cPerks.collections.CustomItemCollection;
 import test.server.ririyo.cPerks.configs.UserDataHandler;
 import test.server.ririyo.cPerks.lootcrate.LootCrateHandler;
+import test.server.ririyo.cPerks.lootcrate.LootCrateKeyItem;
 import test.server.ririyo.cPerks.perks.perklogic.PerkLogic;
 import test.server.ririyo.cPerks.perks.perklogic.EnchanterCollection;
 import test.server.ririyo.cPerks.perks.perklogic.HunterCollection;
@@ -89,6 +92,11 @@ public class PlayerLevelHandler {
 
         if(level >= 5){
             updateUnlockedFeatures(player, job, level);
+        }
+
+        if(level == 30){
+            PerkLogic.putInPlayerInventory(player, LootCrateKeyItem.get(5, LootCrateKeyItem.LootKeyType.LEGENDARY));
+            player.sendMessage(ChatColor.BLUE + "You've been given " + ChatColor.GREEN + "5" + ChatColor.GOLD + " Legendary" + ChatColor.GREEN + " Loot Crate Keys " + ChatColor.BLUE + "for reaching level 30 " + job + "!");
         }
     }
 

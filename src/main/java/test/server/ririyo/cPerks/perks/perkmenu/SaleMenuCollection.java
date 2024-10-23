@@ -1,6 +1,8 @@
 package test.server.ririyo.cPerks.perks.perkmenu;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import test.server.ririyo.cPerks.lootcrate.LootCrateKeyItem;
 
 import java.util.Map;
 
@@ -55,6 +57,8 @@ public class SaleMenuCollection {
             Map.entry(Material.RAW_GOLD_BLOCK, 36),
             Map.entry(Material.GOLD_INGOT, 8),
             Map.entry(Material.GOLD_BLOCK, 72),
+            Map.entry(Material.LAPIS_LAZULI, 7),
+            Map.entry(Material.LAPIS_BLOCK, 63),
             Map.entry(Material.REDSTONE, 5),
             Map.entry(Material.REDSTONE_BLOCK, 45),
             Map.entry(Material.DIAMOND, 15),
@@ -67,6 +71,8 @@ public class SaleMenuCollection {
             Map.entry(Material.NETHERITE_BLOCK, 1350),
             Map.entry(Material.QUARTZ, 5),
             Map.entry(Material.QUARTZ_BLOCK, 20),
+            Map.entry(Material.OBSIDIAN, 20),
+            Map.entry(Material.TUFF, 1),
 
             ///FARMER ITEMS
                 ///CROP YIELD
@@ -120,5 +126,12 @@ public class SaleMenuCollection {
 
             /// OTHER ITEMS
             Map.entry(Material.GOLDEN_APPLE, 25)
+    );
+
+    public static Map<String, ItemStack> saleTags = Map.ofEntries(
+                ///SOME ITEMS OBTAINED FROM LOOT CRATES CAN BE SOLD FOR LOWER TIER LOOT CRATE KEYS
+            Map.entry("Rare", LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL)),
+            Map.entry("Legendary", LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.RARE)),
+            Map.entry("Mythic", LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY))
     );
 }

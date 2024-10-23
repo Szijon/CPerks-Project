@@ -116,6 +116,9 @@ public class CustomEnchantments {
 
     public static void enchantEvent(EnchantItemEvent event) {
         ItemStack item = event.getItem();
+        ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(meta);
         int enchantLevel = event.getExpLevelCost();
         Map<Enchantment, Integer> enchantsToAdd = event.getEnchantsToAdd();
         boolean constraints = false;
@@ -262,6 +265,10 @@ public class CustomEnchantments {
                 Damageable damageable = (Damageable) item.getItemMeta();
                 damageable.setDamage(0);
                 item.setItemMeta(damageable);
+            }
+        } else {
+            for(ItemStack drop : drops) {
+                event.getPlayer().getWorld().dropItemNaturally(event.getBlock().getLocation(), drop);
             }
         }
     }

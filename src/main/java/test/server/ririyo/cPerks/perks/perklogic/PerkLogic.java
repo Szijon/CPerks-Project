@@ -7,6 +7,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import test.server.ririyo.cPerks.collections.NamespacedKeyCollection;
@@ -234,10 +235,34 @@ public class PerkLogic {
     }
 
     public static void putInPlayerInventory(Player player, ItemStack item){
-        if (player.getInventory().firstEmpty() != -1){
-            player.getInventory().addItem(item);
+            ///INVENTORY HAS AT LEAST 1 EMPTY SLOT
+        Inventory inv = player.getInventory();
+        if (inv.firstEmpty() != -1){
+            inv.addItem(item);
         } else {
-            player.getLocation().getWorld().dropItemNaturally(player.getLocation(), item);
+            ///INVENTORY HAS THIS ITEM
+            if(inv.contains(item.getType())){
+                int amountToAdd = item.getAmount();
+                int remaining = amountToAdd;
+                for(ItemStack itemStack : inv.getContents()){
+                    if(itemStack != null){
+                        if(itemStack.getType() == item.getType()) {
+                            int itemAmount = itemStack.getAmount();
+                            if (itemAmount < 64) {
+                                itemAmount += amountToAdd;
+                                remaining = itemAmount - 64;
+                            }
+                            if(itemAmount > 64){
+                                itemAmount = 64;
+                            }
+                            itemStack.setAmount(itemAmount);
+                        }
+                    }
+                }
+                player.getLocation().getWorld().dropItemNaturally(player.getLocation(), new ItemStack(item.getType(), remaining));
+            } else {
+                player.getLocation().getWorld().dropItemNaturally(player.getLocation(), item);
+            }
         }
     }
 

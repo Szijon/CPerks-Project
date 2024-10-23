@@ -144,13 +144,61 @@ public class PerkMenuCollection {
         return balance;
     }
 
-    public static ItemStack getLootKeyShopItem(){
+    public static ItemStack getNormalLootKeyShopItem(){
         ItemStack key = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.NORMAL);
         ItemMeta meta = key.getItemMeta();
         if(meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            pdc.set(NamespacedKeyCollection.LootKeyKey, PersistentDataType.BOOLEAN, true);
-            int price = MenuCollection.goldShopPrices.get("Loot Key");
+            pdc.set(NamespacedKeyCollection.LootKeyKey, PersistentDataType.STRING, "Normal Loot Key");
+            int price = MenuCollection.goldShopPrices.get("Normal Loot Key");
+            List<String> lore = meta.getLore();
+            lore.add("");
+            lore.add(ChatColor.BLUE + "Price: " + ChatColor.GOLD + price + " Gold");
+            meta.setLore(lore);
+            key.setItemMeta(meta);
+        }
+        return key;
+    }
+
+    public static ItemStack getRareLootKeyShopItem(){
+        ItemStack key = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.RARE);
+        ItemMeta meta = key.getItemMeta();
+        if(meta != null) {
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+            pdc.set(NamespacedKeyCollection.LootKeyKey, PersistentDataType.STRING, "Rare Loot Key");
+            int price = MenuCollection.goldShopPrices.get("Rare Loot Key");
+            List<String> lore = meta.getLore();
+            lore.add("");
+            lore.add(ChatColor.BLUE + "Price: " + ChatColor.GOLD + price + " Gold");
+            meta.setLore(lore);
+            key.setItemMeta(meta);
+        }
+        return key;
+    }
+
+    public static ItemStack getLegendaryLootKeyShopItem(){
+        ItemStack key = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.LEGENDARY);
+        ItemMeta meta = key.getItemMeta();
+        if(meta != null) {
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+            pdc.set(NamespacedKeyCollection.LootKeyKey, PersistentDataType.STRING, "Legendary Loot Key");
+            int price = MenuCollection.goldShopPrices.get("Legendary Loot Key");
+            List<String> lore = meta.getLore();
+            lore.add("");
+            lore.add(ChatColor.BLUE + "Price: " + ChatColor.GOLD + price + " Gold");
+            meta.setLore(lore);
+            key.setItemMeta(meta);
+        }
+        return key;
+    }
+
+    public static ItemStack getMythicLootKeyShopItem(){
+        ItemStack key = LootCrateKeyItem.get(1, LootCrateKeyItem.LootKeyType.MYTHIC);
+        ItemMeta meta = key.getItemMeta();
+        if(meta != null) {
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+            pdc.set(NamespacedKeyCollection.LootKeyKey, PersistentDataType.STRING, "Mythic Loot Key");
+            int price = MenuCollection.goldShopPrices.get("Mythic Loot Key");
             List<String> lore = meta.getLore();
             lore.add("");
             lore.add(ChatColor.BLUE + "Price: " + ChatColor.GOLD + price + " Gold");

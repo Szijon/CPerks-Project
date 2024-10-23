@@ -52,8 +52,10 @@ public class EnchantListener implements Listener {
         }
         if(item != null) {
             ItemStack result = new ItemStack(item.getType());
+            Damageable resultDamageable = (Damageable) result.getItemMeta();
             Damageable damageable = (Damageable) item.getItemMeta();
-            result.setItemMeta(damageable);
+            resultDamageable.setDamage(damageable.getDamage());
+            result.setItemMeta(resultDamageable);
             event.setResult(result);
         }
     }

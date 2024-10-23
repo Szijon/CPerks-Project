@@ -129,10 +129,8 @@ public class BlockListener implements Listener {
 
             if(drops != null) {
                 ItemStack item = event.getPlayer().getEquipment().getItemInMainHand();
-                if(item != null) {
-                    for (Map.Entry<Block, Collection<ItemStack>> entry : drops.entrySet()) {
-                        CustomEnchantments.processCustomEnchants(item, event, drops.get(entry.getKey()));
-                    }
+                for (Map.Entry<Block, Collection<ItemStack>> entry : drops.entrySet()) {
+                    CustomEnchantments.processCustomEnchants(item, event, drops.get(entry.getKey()));
                 }
             }
 

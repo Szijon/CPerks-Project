@@ -4,6 +4,8 @@ import org.bukkit.NamespacedKey;
 import org.checkerframework.checker.units.qual.N;
 import test.server.ririyo.cPerks.CPerks;
 
+import javax.naming.Name;
+import javax.xml.stream.events.Namespace;
 import java.util.Map;
 
 public class NamespacedKeyCollection {
@@ -50,6 +52,12 @@ public class NamespacedKeyCollection {
         /// GOLD SHOP
     public static NamespacedKey LootKeyKey = new NamespacedKey(CPerks.getInstance(), "Loot-Key");
     public static NamespacedKey FlightCreditKey = new NamespacedKey(CPerks.getInstance(), "Flight-Credit");
+
+        /// SELL MENU
+    public static NamespacedKey ConfirmKey = new NamespacedKey(CPerks.getInstance(), "Confirm");
+    public static NamespacedKey SellableListKey = new NamespacedKey(CPerks.getInstance(), "SellableList");
+    public static NamespacedKey SellOriginKey = new NamespacedKey(CPerks.getInstance(), "SellOrigin");
+    public static NamespacedKey GoldAmount = new NamespacedKey(CPerks.getInstance(), "GoldAmount");
 
         /// PERK FEATURES
     public static Map<String, NamespacedKey> featureKeys = Map.ofEntries(
